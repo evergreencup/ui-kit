@@ -1,0 +1,249 @@
+/*
+ * @file src/theme.css
+ * @desc The Evergreen Cup theme for Tailwind 4: the six PNW palettes (evergreen, cascade, bark,
+ *       moss, fog, rain), the semantic tokens, the three font stacks, the atmosphere animations
+ *       and helpers, the reduced-motion rule, the `coarse:` variant, and an @source line so
+ *       Tailwind generates the classes the kit's components use.
+ *
+ *       Use it from the app's global stylesheet, after Tailwind:
+ *
+ *         @import "tailwindcss";
+ *         @import "@evergreencup/ui-kit/theme.css";
+ *
+ *       Load the fonts with next/font/google as --font-big-shoulders (Big Shoulders Display),
+ *       --font-geist-sans and --font-geist-mono. Every hex value here
+ *       mirrors src/brand/palette.ts; tests/theme.test.ts keeps the two in step.
+ * @author David @dvhsh (https://dvh.sh)
+ * @created Tue Oct 6, 2026
+ * @modified Tue Oct 6, 2026
+ */
+
+/* This file ships as dist/theme.css, so './' is the package's compiled components. */
+@source "./";
+
+/* A touchscreen as the main pointer. */
+@custom-variant coarse (@media (pointer: coarse));
+
+@theme {
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Evergreen: primary, Doug Flag forest green */
+  --color-evergreen-50: #eefaf1;
+  --color-evergreen-100: #d5f2de;
+  --color-evergreen-200: #aee5bd;
+  --color-evergreen-300: #7cd293;
+  --color-evergreen-400: #49b86a;
+  --color-evergreen-500: #2a9b50;
+  --color-evergreen-600: #1d7c3f;
+  --color-evergreen-700: #165f33;
+  --color-evergreen-800: #104726;
+  --color-evergreen-900: #0a301a;
+  --color-evergreen-950: #051a0d;
+
+  /* Cascade: Doug Flag blue, overcast sky */
+  --color-cascade-50: #eef6fa;
+  --color-cascade-100: #d5e8f1;
+  --color-cascade-200: #a6cfe0;
+  --color-cascade-300: #6fb2ce;
+  --color-cascade-400: #3e92b8;
+  --color-cascade-500: #00759c;
+  --color-cascade-600: #005e7e;
+  --color-cascade-700: #004861;
+  --color-cascade-800: #033246;
+  --color-cascade-900: #021e2c;
+  --color-cascade-950: #011320;
+
+  /* Bark: warm wood */
+  --color-bark-50: #f3e9db;
+  --color-bark-100: #e3cdad;
+  --color-bark-200: #c9a984;
+  --color-bark-300: #ab885e;
+  --color-bark-400: #8e6738;
+  --color-bark-500: #6b4423;
+  --color-bark-700: #3f2812;
+  --color-bark-800: #2c1b0c;
+  --color-bark-900: #1e1208;
+  --color-bark-950: #120a04;
+
+  /* Moss: lichen and undergrowth */
+  --color-moss-300: #a9bb96;
+  --color-moss-400: #8fa579;
+  --color-moss-600: #5c7446;
+  --color-moss-900: #1e2916;
+
+  /* Fog: body text and subdued labels */
+  --color-fog-100: #edf2f4;
+  --color-fog-200: #d5dde1;
+  --color-fog-300: #bcc8cd;
+  --color-fog-400: #9dacb0;
+  --color-fog-500: #7f9094;
+  --color-fog-600: #667579;
+  --color-fog-700: #4d5a5e;
+  --color-fog-800: #354042;
+  --color-fog-900: #212a2c;
+  --color-fog-950: #131a1b;
+
+  /* Rain: streaks, distant skylines, recessed details */
+  --color-rain-400: #6d8da0;
+  --color-rain-600: #3e5a70;
+  --color-rain-800: #21323f;
+
+  /* Semantic tokens */
+  --color-background: var(--color-evergreen-950);
+  --color-surface: #0b261a;
+  --color-surface-elevated: #0f3322;
+  --color-foreground: var(--color-fog-100);
+  --color-muted: var(--color-fog-300);
+  --color-accent: var(--color-evergreen-400);
+
+  --animate-sway-left: sway-left var(--sway-duration, 6s) ease-in-out var(--sway-delay, 0s) infinite;
+  --animate-sway-right: sway-right var(--sway-duration, 7s) ease-in-out var(--sway-delay, 0s)
+    infinite;
+  --animate-mist-drift: mist-drift 28s ease-in-out infinite alternate;
+  --animate-leaf-drift: leaf-drift 22s linear var(--leaf-delay, 0s) infinite;
+
+  @keyframes sway-left {
+    0%,
+    100% {
+      transform: rotate(-0.8deg) translateY(0);
+    }
+    50% {
+      transform: rotate(0.6deg) translateY(-2px);
+    }
+  }
+  @keyframes sway-right {
+    0%,
+    100% {
+      transform: rotate(0.6deg) translateY(-1px);
+    }
+    50% {
+      transform: rotate(-0.8deg) translateY(0);
+    }
+  }
+  @keyframes mist-drift {
+    0% {
+      transform: translate3d(-4%, 0, 0);
+    }
+    100% {
+      transform: translate3d(4%, 0, 0);
+    }
+  }
+  @keyframes leaf-drift {
+    0% {
+      transform: translate3d(0, -6vh, 0) rotate(-6deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.9;
+    }
+    90% {
+      opacity: 0.6;
+    }
+    100% {
+      transform: translate3d(-14vw, 72vh, 0) rotate(140deg);
+      opacity: 0;
+    }
+  }
+  @keyframes underline-grow {
+    0% {
+      transform: scaleX(0);
+    }
+    100% {
+      transform: scaleX(1);
+    }
+  }
+}
+
+@utility sway-left {
+  animation: var(--animate-sway-left);
+  transform-origin: bottom;
+}
+@utility sway-right {
+  animation: var(--animate-sway-right);
+  transform-origin: bottom;
+}
+@utility mist-drift {
+  animation: var(--animate-mist-drift);
+  will-change: transform;
+}
+@utility leaf-drift {
+  animation: var(--animate-leaf-drift);
+  will-change: transform, opacity;
+}
+
+/* The active nav link's underline: grows in from the left under the label. */
+@utility active-underline {
+  &::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 2px;
+    height: 2px;
+    background: var(--color-evergreen-400);
+    transform-origin: left center;
+    animation: underline-grow 320ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+}
+
+/* Parallax layer: the layer sets --parallax-factor, a ParallaxScope parent sets --px/--py. */
+@utility parallax-layer {
+  transform: translate3d(
+    calc(var(--px, 0) * var(--parallax-factor, 0) * 1px),
+    calc(var(--py, 0) * var(--parallax-factor, 0) * 1px),
+    0
+  );
+  transition: transform 180ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: transform;
+}
+
+/* The faint diagonal hatch on placeholder and pending panels. */
+@utility diag-stripes {
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.03) 0 1px,
+    transparent 1px 9px
+  );
+}
+
+/* Big Shoulders, tight. A utility, not a --font-* theme key, so it can carry the tracking. */
+@utility font-display {
+  font-family:
+    var(--font-big-shoulders), Impact, Oswald, var(--font-geist-sans), system-ui, sans-serif;
+  letter-spacing: -0.035em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sway-left,
+  .sway-right,
+  .mist-drift,
+  .leaf-drift {
+    animation: none !important;
+  }
+  .parallax-layer {
+    transform: none !important;
+    transition: none !important;
+  }
+  .active-underline::after {
+    animation: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .parallax-layer {
+    transform: none;
+  }
+}
+
+html,
+body {
+  /* Dark-only brand: native widgets (select popups, date pickers, scrollbars) paint dark too. */
+  color-scheme: dark;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  /* `clip`, not `hidden`: the sticky header keeps working while off-screen drawers never add a
+     horizontal scrollbar. */
+  overflow-x: clip;
+}
