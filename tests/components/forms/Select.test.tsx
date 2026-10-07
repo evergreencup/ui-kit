@@ -3,7 +3,7 @@
  * @desc Select: mouse, keyboard, outside click, hidden input, labels and axe.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { fireEvent, render, screen } from "@testing-library/react";
@@ -86,11 +86,29 @@ describe("Select", () => {
     expect(list).toHaveFocus();
     await user.keyboard("{End}{ArrowUp}{q}{Enter}");
     expect(trigger).toHaveTextContent("UTC-07:00");
-    trigger.focus();
+    expect(trigger).toHaveFocus();
     await user.keyboard("{Enter}");
     expect(screen.getByRole("listbox")).toHaveFocus();
     await user.keyboard("{Escape}");
     expect(screen.queryByRole("listbox")).toBeNull();
+    expect(trigger).toHaveFocus();
+  });
+
+  it("closes on Tab and lets focus move on to the next control", async () => {
+    const user = userEvent.setup();
+    render(
+      <>
+        <Harness />
+        <button type="button">next</button>
+      </>,
+    );
+    const trigger = screen.getByRole("button", { name: /UTC offset/ });
+    trigger.focus();
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("listbox")).toHaveFocus();
+    await user.tab();
+    expect(screen.queryByRole("listbox")).toBeNull();
+    expect(screen.getByRole("button", { name: "next" })).toHaveFocus();
   });
 
   it("closes on an outside click, stays shut when disabled, and takes a placeholder and aria-label", async () => {

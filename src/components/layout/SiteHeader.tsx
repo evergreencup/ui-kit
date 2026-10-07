@@ -5,7 +5,7 @@
  *       mobile menu. All data comes in as props. Server-safe.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import type { ReactNode } from "react";
@@ -19,6 +19,7 @@ import { HeaderWordmark } from "../brand/HeaderWordmark.js";
 import { MobileMenu } from "./MobileMenu.js";
 import { NavLink } from "./NavLink.js";
 import type { NavItem } from "./nav.js";
+import { SkipLink } from "./SkipLink.js";
 
 /** The nav, call to action, account link and slots. */
 export type SiteHeaderProps = {
@@ -30,12 +31,15 @@ export type SiteHeaderProps = {
   actions?: ReactNode;
   /** Extras at the bottom of the mobile menu. */
   mobileExtras?: ReactNode;
+  /** The main content's fragment ("#main"): renders a skip link to it before the logo. */
+  skipTo?: string | undefined;
   className?: string | undefined;
 };
 
 /**
  * @function SiteHeader
- * @param props {SiteHeaderProps} items, cta, account, actions, mobileExtras and className
+ * @param props {SiteHeaderProps} items, cta, account, actions, mobileExtras, skipTo and
+ *        className
  * @returns {JSX.Element} the header banner
  */
 export const SiteHeader = ({
@@ -44,6 +48,7 @@ export const SiteHeader = ({
   account,
   actions,
   mobileExtras,
+  skipTo,
   className,
 }: SiteHeaderProps) => (
   <header
@@ -52,6 +57,7 @@ export const SiteHeader = ({
       className,
     )}
   >
+    {skipTo ? <SkipLink href={skipTo} /> : null}
     <Container width="full" className="flex h-16 items-center justify-between gap-4">
       <AutoLink
         href="/"

@@ -5,10 +5,10 @@
  *       initial size) or its empty line.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { CumulativeRaisedChart, raisedDomainMax } from "../../src/charts/CumulativeRaisedChart.js";
 import {
@@ -145,15 +145,24 @@ describe("charts", () => {
     );
     expect(container.querySelector("svg.recharts-surface")).not.toBeNull();
     expect(container.querySelector("linearGradient")?.id).toMatch(/^egc-raised-[\w-]+$/);
+    const table = screen.getByRole("table", { name: "Raised by day" });
+    expect(table.parentElement).toHaveClass("sr-only");
+    expect(
+      within(table)
+        .getAllByRole("columnheader")
+        .map((c) => c.textContent),
+    ).toEqual(["Day", "Raised that day", "Raised to date"]);
+    expect(within(table).getAllByRole("rowheader")).toHaveLength(DAYS.length);
     await expectNoAxeViolations(container);
   });
 
   it("draws the cumulative chart without a goal or a size", () => {
     const { container } = render(
       <div style={{ width: 480, height: 240 }}>
-        <CumulativeRaisedChart data={DAYS} />
+        <CumulativeRaisedChart data={DAYS} caption="Crowdfund by day" />
       </div>,
     );
+    expect(screen.getByRole("table", { name: "Crowdfund by day" })).toBeInTheDocument();
     expect(container.querySelector(".recharts-responsive-container")).not.toBeNull();
   });
 
@@ -174,6 +183,10 @@ describe("charts", () => {
     const swatch = screen.getByText("Ko-fi · 30").querySelector("span");
     expect(swatch).toHaveStyle({ backgroundColor: seriesColor(0) });
     expect(container.querySelector("svg.recharts-surface")).not.toBeNull();
+    const table = screen.getByRole("table", { name: "Donations by source" });
+    expect(within(table).getByRole("rowheader", { name: "Ko-fi" }).parentElement).toHaveTextContent(
+      "Ko-fi30$900",
+    );
     await expectNoAxeViolations(container);
   });
 
@@ -183,8 +196,13 @@ describe("charts", () => {
   });
 
   it("draws the registration bars", async () => {
-    const { container } = render(<RegistrationStatusChart rows={ROWS} width={480} height={200} />);
+    const { container } = render(
+      <RegistrationStatusChart rows={ROWS} width={480} height={200} caption="Signups" />,
+    );
     expect(container.querySelector("svg.recharts-surface")).not.toBeNull();
+    const table = screen.getByRole("table", { name: "Signups" });
+    expect(within(table).getAllByRole("columnheader")).toHaveLength(6);
+    expect(within(table).getAllByRole("rowheader")).toHaveLength(ROWS.length);
     await expectNoAxeViolations(container);
   });
 

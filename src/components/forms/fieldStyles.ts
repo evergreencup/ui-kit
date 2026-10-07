@@ -5,7 +5,7 @@
  *       and the mono label.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { cx } from "../../utils/cx.js";
@@ -36,7 +36,7 @@ export const fieldClasses = (
   className?: string,
 ) =>
   cx(
-    "text-evergreen-50 transition placeholder:text-fog-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60",
+    "text-evergreen-50 transition placeholder:text-fog-500 focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-60",
     CONTROL[variant],
     invalid && INVALID,
     className,

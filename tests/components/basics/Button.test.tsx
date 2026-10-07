@@ -3,7 +3,7 @@
  * @desc Button, ButtonLink and buttonClasses: variants, sizes, pill, pending, links.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { render, screen } from "@testing-library/react";
@@ -49,7 +49,8 @@ describe("Button", () => {
         Save
       </Button>,
     );
-    expect(screen.getByRole("button", { name: "Submitting…" })).toBeEnabled();
+    // disabled={false} must not re-enable a pending button: that allowed a double submit.
+    expect(screen.getByRole("button", { name: "Submitting…" })).toBeDisabled();
     rerender(<Button onClick={onClick}>Save</Button>);
     expect(screen.getByRole("button")).not.toHaveAttribute("aria-busy");
     await userEvent.click(screen.getByRole("button"));
@@ -86,7 +87,7 @@ describe("ButtonLink", () => {
 describe("buttonClasses", () => {
   it("builds each variant and size", () => {
     expect(buttonClasses({ variant: "ghost" })).toContain("text-fog-300");
-    expect(buttonClasses({ variant: "osu", pill: true })).toContain("bg-pink-500");
+    expect(buttonClasses({ variant: "osu", pill: true })).toContain("bg-pink-600");
     expect(buttonClasses({ size: "sm" })).toContain("text-[10px]");
     expect(buttonClasses({ size: "lg" })).toContain("text-sm");
     const icon = buttonClasses({ variant: "icon", size: "lg" });

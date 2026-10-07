@@ -6,7 +6,7 @@
  *       when given a `label`.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 "use client";
@@ -63,10 +63,16 @@ export const Select = ({
   );
   const [focused, setFocused] = useState(selected);
   const root = useRef<HTMLDivElement | null>(null);
+  const trigger = useRef<HTMLButtonElement | null>(null);
   const list = useRef<HTMLDivElement | null>(null);
   const close = useCallback(() => {
     setOpen(false);
   }, []);
+  // The list unmounts on close, so a keyboard or option close hands focus back to the trigger.
+  const closeToTrigger = (): void => {
+    setOpen(false);
+    trigger.current?.focus();
+  };
   useOutsideClick(root, open, close);
 
   useEffect(() => {
@@ -86,15 +92,16 @@ export const Select = ({
   const commit = (index: number): void => {
     const option = options[index];
     if (option) onChange(option.value);
-    setOpen(false);
+    closeToTrigger();
   };
   const onListKey = (event: KeyboardEvent<HTMLDivElement>): void => {
     const action = listboxKey(event.key, focused, options.length);
     if (action.type === "none") return;
-    event.preventDefault();
+    // Tab keeps its default, so focus moves on from the trigger to the next control.
+    if (event.key !== "Tab") event.preventDefault();
     if (action.type === "move") setFocused(action.index);
     else if (action.type === "commit") commit(focused);
-    else close();
+    else closeToTrigger();
   };
   const current = options.find((o) => o.value === value);
 
@@ -103,6 +110,7 @@ export const Select = ({
       <div ref={root} className={cx("relative", className)}>
         {name ? <input type="hidden" name={name} value={value} /> : null}
         <button
+          ref={trigger}
           type="button"
           disabled={disabled}
           aria-label={ariaLabel}
@@ -142,7 +150,7 @@ export const Select = ({
             aria-labelledby={field.label === undefined ? undefined : `${field.id}-label`}
             aria-activedescendant={`${listId}-${focused.toString()}`}
             onKeyDown={onListKey}
-            className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-sm border border-evergreen-700/70 bg-evergreen-950 py-1 shadow-xl focus:outline-none"
+            className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-sm border border-evergreen-700/70 bg-evergreen-950 py-1 shadow-xl focus:outline-hidden"
           >
             {options.map((option, i) => (
               // biome-ignore lint/a11y/useFocusableInteractive: options take focus through aria-activedescendant

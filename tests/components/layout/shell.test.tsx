@@ -1,9 +1,10 @@
 /**
  * @file tests/components/layout/shell.test.tsx
- * @desc SiteHeader, MobileMenu, SiteFooter, PageHero, HeroMediaPlaceholder and AccountPill.
+ * @desc SiteHeader (and its skip link), MobileMenu, SiteFooter, PageHero, HeroMediaPlaceholder
+ *       and AccountPill.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
@@ -57,6 +58,18 @@ describe("SiteHeader", () => {
   it("works with only the nav", () => {
     render(<SiteHeader items={NAV} />);
     expect(screen.queryByRole("link", { name: "Register" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "Skip to content" })).toBeNull();
+  });
+
+  it("puts a skip link first when given skipTo", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<SiteHeader items={NAV} skipTo="#content" />);
+    const skip = screen.getByRole("link", { name: "Skip to content" });
+    expect(skip).toHaveAttribute("href", "#content");
+    expect(skip).toHaveClass("sr-only", "focus:not-sr-only");
+    await user.tab();
+    expect(skip).toHaveFocus();
+    await expectNoAxeViolations(container);
   });
 });
 
@@ -90,6 +103,32 @@ describe("MobileMenu", () => {
     await user.click(toggle);
     await user.click(within(dialog).getByRole("button", { name: "Close menu" }));
     expect(toggle).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("moves focus into the drawer, wraps Tab at both ends and hands it back on close", async () => {
+    route.pathname = "/";
+    const user = userEvent.setup();
+    render(
+      <MobileMenu items={NAV} cta={CTA}>
+        <a href="https://discord.gg/x">Join the Discord</a>
+      </MobileMenu>,
+    );
+    const toggle = screen.getByRole("button", { name: "Open menu" });
+    const dialog = screen.getByRole("dialog", { hidden: true });
+    expect(toggle).toHaveAttribute("aria-controls", dialog.id);
+    await user.click(toggle);
+    const close = within(dialog).getByRole("button", { name: "Close menu" });
+    const last = within(dialog).getByRole("link", { name: "Join the Discord" });
+    expect(close).toHaveFocus();
+    await user.tab({ shift: true });
+    expect(last).toHaveFocus();
+    await user.tab();
+    expect(close).toHaveFocus();
+    await user.tab();
+    expect(close).not.toHaveFocus();
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    await user.keyboard("{Escape}");
+    expect(toggle).toHaveFocus();
   });
 
   it("renders only the toggle on the server", () => {

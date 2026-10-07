@@ -3,7 +3,7 @@
  * @desc Timeline (statuses, finale, details, dates), StatBand and TwitchEmbed.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { render, screen, within } from "@testing-library/react";
@@ -57,7 +57,9 @@ describe("Timeline", () => {
     expect(within(items[0] as HTMLElement).getByText("Sep 5 to Sep 6")).toBeInTheDocument();
     expect(within(items[0] as HTMLElement).getByText("· Done")).toBeInTheDocument();
     expect(within(items[1] as HTMLElement).getByText("· Happening now")).toBeInTheDocument();
-    expect(items[0]?.querySelector("article")).toHaveClass("opacity-60");
+    // Past cards dim their surface, not their text, so the text keeps its contrast.
+    expect(items[0]?.querySelector("article")).toHaveClass("bg-evergreen-950/40");
+    expect(items[0]?.querySelector("article")).not.toHaveClass("opacity-60");
     expect(items[1]?.querySelector("article")).toHaveClass("border-evergreen-400/90");
     expect(items[4]?.querySelector(".diag-stripes")).toBeInTheDocument();
     expect(items[4]?.querySelector("h3")).toHaveClass("text-bark-100");

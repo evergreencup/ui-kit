@@ -3,7 +3,7 @@
  * @desc A mod slot label ("HD2") in its pick color on its tint. Server-safe.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { cx } from "../../utils/cx.js";
@@ -30,7 +30,7 @@ export const ModTag = ({ mod, index, className }: ModTagProps) => {
         "shrink-0 rounded-sm px-1.5 py-1 font-bold font-mono text-[11px] uppercase tracking-[0.12em]",
         className,
       )}
-      style={{ color: color.hex, backgroundColor: color.tint }}
+      style={{ color: color.ink, backgroundColor: color.tint }}
     >
       {index === undefined ? mod : slotLabel(mod, index)}
     </span>

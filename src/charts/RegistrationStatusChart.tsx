@@ -5,13 +5,14 @@
  *       ChartCard).
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 "use client";
 
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { AXIS, AXIS_TICK, CATEGORY_TICK, CURSOR, GRID } from "../components/data/chartTheme.js";
+import { ChartDataTable } from "./ChartDataTable.js";
 import { ChartEmpty } from "./ChartEmpty.js";
 import { RegistrationStatusTooltip } from "./RegistrationStatusTooltip.js";
 import { type ChartSize, sizeProps } from "./size.js";
@@ -36,16 +37,19 @@ export type RegistrationStatusChartProps = ChartSize & {
   rows: readonly RegistrationStatusRow[];
   /** When every count is zero (default "No registrations yet."). */
   empty?: string | undefined;
+  /** The hidden data table's caption (default "Registrations by status"). */
+  caption?: string | undefined;
 };
 
 /**
  * @function RegistrationStatusChart
- * @param props {RegistrationStatusChartProps} rows, empty and size
- * @returns {JSX.Element} the stacked bar chart
+ * @param props {RegistrationStatusChartProps} rows, empty, caption and size
+ * @returns {JSX.Element} the stacked bar chart and its sr-only data table
  */
 export const RegistrationStatusChart = ({
   rows,
   empty = "No registrations yet.",
+  caption = "Registrations by status",
   ...size
 }: RegistrationStatusChartProps) => {
   const total = rows.reduce(
@@ -54,36 +58,43 @@ export const RegistrationStatusChart = ({
   );
   if (total === 0) return <ChartEmpty>{empty}</ChartEmpty>;
   return (
-    <ResponsiveContainer width="100%" height="100%" {...sizeProps(size)}>
-      <BarChart
-        data={[...rows]}
-        layout="vertical"
-        margin={{ top: 10, right: 8, left: 4, bottom: 4 }}
-        barCategoryGap={28}
-      >
-        <CartesianGrid {...GRID} strokeOpacity={0.3} horizontal={false} />
-        <XAxis type="number" {...AXIS} tick={AXIS_TICK} allowDecimals={false} />
-        <YAxis
-          type="category"
-          dataKey="kind"
-          {...AXIS}
-          width={64}
-          tick={CATEGORY_TICK}
-          tickFormatter={(v: string) => v.toUpperCase()}
-        />
-        <Tooltip cursor={CURSOR.band} content={<RegistrationStatusTooltip />} />
-        {REGISTRATION_STATUSES.map((s) => (
-          <Bar
-            key={s.key}
-            dataKey={s.key}
-            name={s.label}
-            stackId="status"
-            fill={s.color}
-            radius={[2, 2, 2, 2]}
-            isAnimationActive={false}
+    <>
+      <ResponsiveContainer width="100%" height="100%" {...sizeProps(size)}>
+        <BarChart
+          data={[...rows]}
+          layout="vertical"
+          margin={{ top: 10, right: 8, left: 4, bottom: 4 }}
+          barCategoryGap={28}
+        >
+          <CartesianGrid {...GRID} strokeOpacity={0.3} horizontal={false} />
+          <XAxis type="number" {...AXIS} tick={AXIS_TICK} allowDecimals={false} />
+          <YAxis
+            type="category"
+            dataKey="kind"
+            {...AXIS}
+            width={64}
+            tick={CATEGORY_TICK}
+            tickFormatter={(v: string) => v.toUpperCase()}
           />
-        ))}
-      </BarChart>
-    </ResponsiveContainer>
+          <Tooltip cursor={CURSOR.band} content={<RegistrationStatusTooltip />} />
+          {REGISTRATION_STATUSES.map((s) => (
+            <Bar
+              key={s.key}
+              dataKey={s.key}
+              name={s.label}
+              stackId="status"
+              fill={s.color}
+              radius={[2, 2, 2, 2]}
+              isAnimationActive={false}
+            />
+          ))}
+        </BarChart>
+      </ResponsiveContainer>
+      <ChartDataTable
+        caption={caption}
+        columns={["Kind", ...REGISTRATION_STATUSES.map((s) => s.label)]}
+        rows={rows.map((r) => [r.kind, ...REGISTRATION_STATUSES.map((s) => r[s.key].toString())])}
+      />
+    </>
   );
 };

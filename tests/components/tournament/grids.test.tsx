@@ -4,7 +4,7 @@
  *       rows, columns, drag).
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { fireEvent, render, screen } from "@testing-library/react";
@@ -116,6 +116,25 @@ describe("AvailabilityGrid", () => {
     expect(hour("Fri 12:00")).toHaveAttribute("aria-pressed", "true");
     await user.click(screen.getByRole("button", { name: "Toggle 12:00 on every day" }));
     expect(hour("Sun 12:00")).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("is one Tab stop that arrows, Home and End move around, and announces the picked runs", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    const stops = screen
+      .getAllByRole("button")
+      .filter((b) => b.dataset.slot !== undefined && b.tabIndex === 0);
+    expect(stops).toEqual([hour("Fri 00:00")]);
+    hour("Fri 00:00").focus();
+    await user.keyboard("{ArrowRight}{ArrowDown}");
+    expect(hour("Sat 01:00")).toHaveFocus();
+    expect(hour("Sat 01:00")).toHaveAttribute("tabindex", "0");
+    expect(hour("Fri 00:00")).toHaveAttribute("tabindex", "-1");
+    await user.keyboard("{End}{Enter}");
+    expect(hour("Sat 23:00")).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("Sat 23")).toHaveAttribute("aria-live", "polite");
+    await user.keyboard("{ArrowDown}{ArrowDown}{Home}{ArrowLeft}{ArrowUp}{x}");
+    expect(hour("Sat 00:00")).toHaveFocus();
   });
 
   it("disables everything and takes a custom hint", () => {

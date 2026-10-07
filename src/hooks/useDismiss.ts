@@ -1,10 +1,10 @@
 /**
  * @file src/hooks/useDismiss.ts
- * @desc Client hooks for overlays: Escape to close, a click outside to close, and a counted
- *       page scroll lock. The select's listbox and the mobile menu share them.
+ * @desc Client hooks for overlays: Escape to close, a click outside to close, a counted page
+ *       scroll lock, and a focus trap. The select's listbox and the mobile menu share them.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 "use client";
@@ -76,4 +76,39 @@ export const useScrollLock = (active: boolean): void => {
       if (locks === 0) document.body.style.overflow = saved;
     };
   }, [active]);
+};
+
+/** What a focus trap cycles through: enabled, tabbable controls. */
+export const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/**
+ * @function useFocusTrap
+ * @param ref {RefObject<HTMLElement | null>} the dialog to keep focus inside
+ * @param active {boolean} trap while true
+ * @returns {void} on activation focuses the first control inside; Tab and Shift+Tab wrap at the
+ *          ends; on release focus goes back to whatever had it before (the toggle)
+ */
+export const useFocusTrap = (ref: RefObject<HTMLElement | null>, active: boolean): void => {
+  useEffect(() => {
+    if (!active) return;
+    const back = document.activeElement as HTMLElement | null;
+    const items = (): HTMLElement[] => [
+      ...(ref.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []),
+    ];
+    items()[0]?.focus();
+    const onKeyDown = (event: KeyboardEvent): void => {
+      if (event.key !== "Tab") return;
+      const list = items();
+      const edge = event.shiftKey ? list[0] : list.at(-1);
+      if (document.activeElement !== edge) return;
+      event.preventDefault();
+      (event.shiftKey ? list.at(-1) : list[0])?.focus();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      back?.focus();
+    };
+  }, [ref, active]);
 };

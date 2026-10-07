@@ -3,7 +3,7 @@
  * @desc ComingSoon, ComingSoonNote, SubmitButton (with a real form action) and SignInWithOsu.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { act, render, screen } from "@testing-library/react";
@@ -90,7 +90,7 @@ describe("SignInWithOsu", () => {
     const { container } = render(<SignInWithOsu href="/signin" />);
     const link = screen.getByRole("link", { name: "Sign in with osu!" });
     expect(link).toHaveAttribute("href", "/signin");
-    expect(link).toHaveClass("bg-pink-500", "rounded-full");
+    expect(link).toHaveClass("bg-pink-600", "rounded-full");
     await expectNoAxeViolations(container);
   });
 

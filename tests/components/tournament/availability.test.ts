@@ -3,13 +3,14 @@
  * @desc availability.ts: slot ids, ranges, toggles, drags, overlap and summaries.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { describe, expect, it } from "vitest";
 import {
   applyIds,
   fullOverlap,
+  gridMove,
   HOURS,
   overlapLevels,
   rangeIds,
@@ -19,6 +20,19 @@ import {
 } from "../../../src/components/tournament/availability.js";
 
 describe("availability", () => {
+  it("moves a grid cursor with arrows, Home and End, clamped at the edges", () => {
+    expect(gridMove("ArrowRight", { day: "fri", hour: 3 })).toEqual({ day: "fri", hour: 4 });
+    expect(gridMove("ArrowLeft", { day: "fri", hour: 0 })).toEqual({ day: "fri", hour: 0 });
+    expect(gridMove("ArrowRight", { day: "fri", hour: 23 })).toEqual({ day: "fri", hour: 23 });
+    expect(gridMove("ArrowDown", { day: "sat", hour: 5 })).toEqual({ day: "sun", hour: 5 });
+    expect(gridMove("ArrowDown", { day: "sun", hour: 5 })).toEqual({ day: "sun", hour: 5 });
+    expect(gridMove("ArrowUp", { day: "fri", hour: 5 })).toEqual({ day: "fri", hour: 5 });
+    expect(gridMove("ArrowUp", { day: "sun", hour: 5 })).toEqual({ day: "sat", hour: 5 });
+    expect(gridMove("Home", { day: "sat", hour: 9 })).toEqual({ day: "sat", hour: 0 });
+    expect(gridMove("End", { day: "sat", hour: 9 })).toEqual({ day: "sat", hour: 23 });
+    expect(gridMove("a", { day: "sat", hour: 9 })).toBeNull();
+  });
+
   it("formats ids and hours", () => {
     expect(slotId("sat", 4)).toBe("sat-04");
     expect(HOURS).toHaveLength(24);

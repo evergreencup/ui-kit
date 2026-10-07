@@ -4,11 +4,11 @@
  *       palette steps.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { describe, expect, it } from "vitest";
-import { INK } from "../../src/brand/colorMath.js";
+import { AA_TEXT, contrastRatio, INK } from "../../src/brand/colorMath.js";
 import {
   CORE_COLORS,
   PALETTE,
@@ -45,6 +45,12 @@ describe("swatches", () => {
       expect(PALETTE_INFO[name].description.length).toBeGreaterThan(10);
       expect(swatches(name).length).toBe(Object.keys(PALETTE[name]).length);
     }
+  });
+
+  it("gives every swatch an ink that reads at AA", () => {
+    for (const name of PALETTE_ORDER)
+      for (const s of swatches(name))
+        expect(contrastRatio(s.hex, s.ink), s.token).toBeGreaterThanOrEqual(AA_TEXT);
   });
 });
 

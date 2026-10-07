@@ -6,9 +6,10 @@
  *       ChartCard.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
+export * from "./ChartDataTable.js";
 export * from "./ChartEmpty.js";
 export * from "./CumulativeRaisedChart.js";
 export * from "./CumulativeRaisedTooltip.js";

@@ -7,7 +7,7 @@
  *       and the Recharts charts at "@evergreencup/ui-kit/charts" (this barrel never imports recharts).
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 // Brand data
@@ -110,6 +110,7 @@ export * from "./components/layout/nav.js";
 export * from "./components/layout/PageHero.js";
 export * from "./components/layout/SiteFooter.js";
 export * from "./components/layout/SiteHeader.js";
+export * from "./components/layout/SkipLink.js";
 export * from "./components/layout/SocialLinks.js";
 // Components: osu
 export * from "./components/osu/BeatmapRow.js";

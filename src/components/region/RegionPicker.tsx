@@ -5,7 +5,7 @@
  *       a chip row with the same choices plus an optional "Outside the PNW". Controlled.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 "use client";
@@ -98,7 +98,7 @@ export const RegionPicker = ({
                   aria-label={r}
                   tabIndex={!disabled && i === tabStop ? 0 : -1}
                   className={cx(
-                    "outline-none transition-[fill,stroke] duration-150 focus-visible:stroke-fog-50 motion-reduce:transition-none focus-visible:[stroke-width:2.5]",
+                    "outline-hidden transition-[fill,stroke] duration-150 focus-visible:stroke-fog-50 motion-reduce:transition-none focus-visible:[stroke-width:2.5]",
                     disabled ? "cursor-not-allowed" : "cursor-pointer",
                   )}
                   fill={look.fill}

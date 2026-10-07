@@ -6,15 +6,15 @@
  *       on Escape, the backdrop, the close button and a route change, and locks page scroll.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 "use client";
 
 import { usePathname } from "next/navigation.js";
-import { type ReactNode, useCallback, useEffect, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useEscapeKey, useScrollLock } from "../../hooks/useDismiss.js";
+import { useEscapeKey, useFocusTrap, useScrollLock } from "../../hooks/useDismiss.js";
 import { useMounted } from "../../hooks/useMounted.js";
 import { cx } from "../../utils/cx.js";
 import { buttonClasses } from "../basics/buttonStyles.js";
@@ -43,11 +43,14 @@ export const MobileMenu = ({ items, cta, account, children }: MobileMenuProps) =
   const [open, setOpen] = useState(false);
   const mounted = useMounted();
   const pathname = usePathname();
+  const id = useId();
+  const dialog = useRef<HTMLDivElement | null>(null);
   const close = useCallback(() => {
     setOpen(false);
   }, []);
   useEscapeKey(open, close);
   useScrollLock(open);
+  useFocusTrap(dialog, open);
   // biome-ignore lint/correctness/useExhaustiveDependencies: the route is the signal to close on
   useEffect(close, [pathname]);
 
@@ -62,6 +65,8 @@ export const MobileMenu = ({ items, cta, account, children }: MobileMenuProps) =
         )}
       />
       <div
+        ref={dialog}
+        id={id}
         role="dialog"
         aria-modal="true"
         aria-label="Menu"
@@ -126,6 +131,7 @@ export const MobileMenu = ({ items, cta, account, children }: MobileMenuProps) =
         type="button"
         aria-label="Open menu"
         aria-expanded={open}
+        aria-controls={id}
         onClick={() => {
           setOpen(true);
         }}

@@ -4,7 +4,7 @@
  *       Server-safe.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import type { ComponentProps, ReactNode } from "react";
@@ -33,7 +33,7 @@ export const Checkbox = ({ id, label, className, ...props }: CheckboxProps) => (
       {...props}
       id={id}
       type="checkbox"
-      className="size-4 shrink-0 rounded-sm border border-evergreen-700 bg-evergreen-950 accent-evergreen-400 focus:outline-none"
+      className="size-4 shrink-0 rounded-sm border border-evergreen-700 bg-evergreen-950 accent-evergreen-400 focus:outline-hidden"
     />
     <span>{label}</span>
   </label>

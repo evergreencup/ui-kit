@@ -3,11 +3,13 @@
  * @desc osu! links, mod colors, ModTag, PlayerIdentity and BeatmapRow.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { AA_TEXT, contrastRatio, hexToRgb } from "../../../src/brand/colorMath.js";
+import { PALETTE } from "../../../src/brand/palette.js";
 import { BeatmapRow, type BeatmapSlot } from "../../../src/components/osu/BeatmapRow.js";
 import { ModTag } from "../../../src/components/osu/ModTag.js";
 import { MOD_BUCKETS, MOD_COLORS, modColor } from "../../../src/components/osu/modColors.js";
@@ -53,13 +55,42 @@ describe("osu links and mod colors", () => {
     for (const mod of MOD_BUCKETS) expect(modColor(mod)).toBe(MOD_COLORS[mod]);
     expect(modColor("EZ")).toBe(MOD_COLORS.NM);
   });
+
+  it("gives each mod label an ink that reads at AA on its tint over the dark surfaces", () => {
+    const over = (tint: string, under: string): string => {
+      const [r, g, b, a] = (tint.match(/[\d.]+/g) ?? []).map(Number) as [
+        number,
+        number,
+        number,
+        number,
+      ];
+      const base = hexToRgb(under);
+      return `#${[r, g, b]
+        .map((c, i) =>
+          Math.round(a * c + (1 - a) * (base[i] as number))
+            .toString(16)
+            .padStart(2, "0"),
+        )
+        .join("")}`;
+    };
+    for (const mod of MOD_BUCKETS)
+      for (const under of [
+        PALETTE.evergreen["950"],
+        PALETTE.evergreen["900"],
+        PALETTE.evergreen["800"],
+      ])
+        expect(
+          contrastRatio(MOD_COLORS[mod].ink, over(MOD_COLORS[mod].tint, under)),
+          mod,
+        ).toBeGreaterThanOrEqual(AA_TEXT);
+  });
 });
 
 describe("ModTag", () => {
   it("prints the slot in the mod's color", () => {
     const { rerender } = render(<ModTag mod="DT" index={3} className="text-xs" />);
     const tag = screen.getByText("DT3");
-    expect(tag).toHaveStyle({ color: MOD_COLORS.DT.hex });
+    expect(tag).toHaveStyle({ color: MOD_COLORS.DT.ink });
     expect(tag).toHaveClass("text-xs");
     rerender(<ModTag mod="TB" />);
     expect(screen.getByText("TB")).toBeInTheDocument();

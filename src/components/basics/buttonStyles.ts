@@ -5,7 +5,7 @@
  *       menu uses.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { cx } from "../../utils/cx.js";
@@ -37,7 +37,7 @@ const VARIANTS: Record<ButtonVariant, string> = {
   outline:
     "border border-evergreen-700 bg-transparent text-evergreen-200 not-disabled:hover:border-evergreen-400 not-disabled:hover:text-evergreen-50",
   ghost: "text-fog-300 not-disabled:hover:bg-evergreen-900 not-disabled:hover:text-evergreen-50",
-  osu: "bg-pink-500 text-white not-disabled:hover:bg-pink-600",
+  osu: "bg-pink-600 text-white not-disabled:hover:bg-pink-700",
   icon: "size-9 border border-evergreen-800 bg-transparent p-0 text-fog-300 not-disabled:hover:border-evergreen-500 not-disabled:hover:text-evergreen-50 coarse:size-11",
 };
 

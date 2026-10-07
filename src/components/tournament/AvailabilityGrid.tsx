@@ -2,16 +2,18 @@
  * @file src/components/tournament/AvailabilityGrid.tsx
  * @desc Client availability picker: click or Enter/Space toggles an hour, a day label toggles
  *       the whole day, an hour header toggles that hour across the weekend, and a mouse drag paints
- *       a rectangle (adding or removing by the first cell). A status line under it reads the
- *       hovered hour or the count.
+ *       a rectangle (adding or removing by the first cell). The cells are one Tab stop: arrows,
+ *       Home and End move between them. Hours stay 24px wide, so a narrow screen scrolls the
+ *       grid sideways. A status line under it reads the hovered hour or the count, and a
+ *       screen-reader line announces the picked runs.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type KeyboardEvent, useEffect, useRef, useState } from "react";
 import { cx } from "../../utils/cx.js";
 import { plural } from "../../utils/format.js";
 import { FOCUS_RING } from "../basics/focusStyles.js";
@@ -20,17 +22,19 @@ import {
   applyIds,
   DAY_LABELS,
   DAYS,
-  type Day,
+  type GridPoint,
+  gridMove,
   HOURS,
   rangeIds,
   slotId,
+  summarizeAvailability,
   toggleIds,
 } from "./availability.js";
 import {
   CELL_OFF,
   CELL_ON,
   DAY_LABEL,
-  GRID_COLUMNS,
+  EDIT_GRID_COLUMNS,
   GRID_FRAME,
   HOUR_LABEL,
   showHourLabel,
@@ -45,7 +49,7 @@ export type AvailabilityGridProps = {
   emptyHint?: string | undefined;
 };
 
-type Point = { day: Day; hour: number };
+type Point = GridPoint;
 type Drag = Point & { mode: "add" | "remove"; base: readonly string[] };
 
 /**
@@ -62,6 +66,8 @@ export const AvailabilityGrid = ({
   const picked = new Set(selected);
   const drag = useRef<Drag | null>(null);
   const [hover, setHover] = useState<Point | null>(null);
+  const [cursor, setCursor] = useState<Point>({ day: "fri", hour: 0 });
+  const grid = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const end = (): void => {
@@ -84,6 +90,21 @@ export const AvailabilityGrid = ({
     if (d) onChange(applyIds(d.base, rangeIds(d, point), d.mode));
   };
 
+  const onCellKey = (point: Point) => (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === " " || event.key === "Enter") {
+      event.preventDefault();
+      onChange(toggleIds(selected, [slotId(point.day, point.hour)]));
+      return;
+    }
+    const next = gridMove(event.key, point);
+    if (next === null) return;
+    event.preventDefault();
+    setCursor(next);
+    grid.current
+      ?.querySelector<HTMLButtonElement>(`[data-slot="${slotId(next.day, next.hour)}"]`)
+      ?.focus();
+  };
+
   const status = hover
     ? `${DAY_LABELS[hover.day]} · ${HOURS[hover.hour] as string}:00`
     : selected.length > 0
@@ -93,9 +114,9 @@ export const AvailabilityGrid = ({
   const button = cx("transition disabled:cursor-not-allowed disabled:opacity-60", FOCUS_RING);
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className={GRID_FRAME}>
-        <div className="grid items-center gap-px" style={GRID_COLUMNS}>
+    <div className="flex min-w-0 max-w-full flex-col gap-2">
+      <div ref={grid} className={cx(GRID_FRAME, "max-w-full overflow-x-auto")}>
+        <div className="grid items-center gap-px" style={EDIT_GRID_COLUMNS}>
           <span />
           {HOURS.map((h, i) => (
             <button
@@ -111,14 +132,14 @@ export const AvailabilityGrid = ({
                   ),
                 )
               }
-              className={cx(HOUR_LABEL, button, "hover:text-evergreen-200")}
+              className={cx(HOUR_LABEL, button, "h-6 hover:text-evergreen-200")}
             >
               {showHourLabel(i) ? h : "·"}
             </button>
           ))}
         </div>
         {DAYS.map((day) => (
-          <div key={day} className="grid items-center gap-px" style={GRID_COLUMNS}>
+          <div key={day} className="grid items-center gap-px" style={EDIT_GRID_COLUMNS}>
             <button
               type="button"
               disabled={disabled}
@@ -131,12 +152,13 @@ export const AvailabilityGrid = ({
                   ),
                 )
               }
-              className={cx(DAY_LABEL, button, "text-left hover:text-evergreen-50")}
+              className={cx(DAY_LABEL, button, "min-h-6 text-left hover:text-evergreen-50")}
             >
               {DAY_LABELS[day]}
             </button>
             {HOURS.map((h, i) => {
               const on = picked.has(slotId(day, i));
+              const stop = cursor.day === day && cursor.hour === i;
               return (
                 <button
                   key={h}
@@ -144,14 +166,15 @@ export const AvailabilityGrid = ({
                   disabled={disabled}
                   aria-pressed={on}
                   aria-label={`${DAY_LABELS[day]} ${h}:00`}
+                  data-slot={slotId(day, i)}
+                  tabIndex={stop ? 0 : -1}
+                  onFocus={() => {
+                    setCursor({ day, hour: i });
+                  }}
                   onMouseDown={() => press({ day, hour: i })}
                   onMouseEnter={() => enter({ day, hour: i })}
                   onMouseLeave={() => setHover(null)}
-                  onKeyDown={(event) => {
-                    if (event.key !== " " && event.key !== "Enter") return;
-                    event.preventDefault();
-                    onChange(toggleIds(selected, [slotId(day, i)]));
-                  }}
+                  onKeyDown={onCellKey({ day, hour: i })}
                   className={cx(
                     "h-6 rounded-[1px]",
                     button,
@@ -166,8 +189,10 @@ export const AvailabilityGrid = ({
           </div>
         ))}
       </div>
+      <p aria-live="polite" className="sr-only">
+        {summarizeAvailability(selected)}
+      </p>
       <p
-        aria-live="polite"
         className={labelClasses({
           tone: "fog",
           className: "min-h-[1.2em] font-normal tracking-[0.18em]",

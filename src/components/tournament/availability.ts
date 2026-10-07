@@ -5,7 +5,7 @@
  *       and a screen-reader summary ("Fri 18–23 · Sat 00–03"). Pure, server-safe.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 /** The weekend's days, in order. */
@@ -120,6 +120,40 @@ const runs = (hours: number[]): string[] => {
     }
   });
   return out;
+};
+
+/** A cell in the 3-day by 24-hour grid. */
+export type GridPoint = { day: Day; hour: number };
+
+/**
+ * @function gridMove
+ * @param key {string} KeyboardEvent.key
+ * @param from {GridPoint} the focused cell
+ * @returns {GridPoint | null} where the key moves focus (arrows step and clamp at the edges,
+ *          Home and End jump to the row's first and last hour), or null for any other key
+ */
+export const gridMove = (key: string, from: GridPoint): GridPoint | null => {
+  const d = DAYS.indexOf(from.day);
+  const at = (day: number, hour: number): GridPoint => ({
+    day: DAYS[Math.min(Math.max(day, 0), DAYS.length - 1)] as Day,
+    hour: Math.min(Math.max(hour, 0), HOURS.length - 1),
+  });
+  switch (key) {
+    case "ArrowLeft":
+      return at(d, from.hour - 1);
+    case "ArrowRight":
+      return at(d, from.hour + 1);
+    case "ArrowUp":
+      return at(d - 1, from.hour);
+    case "ArrowDown":
+      return at(d + 1, from.hour);
+    case "Home":
+      return at(d, 0);
+    case "End":
+      return at(d, HOURS.length - 1);
+    default:
+      return null;
+  }
 };
 
 /**

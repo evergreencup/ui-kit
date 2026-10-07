@@ -4,11 +4,16 @@
  *       which hour headers get a label, and the cell colors.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 /** The grid template: a label column, then 24 equal hours. */
 export const GRID_COLUMNS = { gridTemplateColumns: "2.5rem repeat(24, minmax(0, 1fr))" } as const;
+
+/** The editable grid's template: hours never narrower than 24px (WCAG 2.5.8 target size). */
+export const EDIT_GRID_COLUMNS = {
+  gridTemplateColumns: "2.5rem repeat(24, minmax(1.5rem, 1fr))",
+} as const;
 
 /** Every third hour gets a printed header. */
 export const showHourLabel = (hour: number): boolean => hour % 3 === 0;

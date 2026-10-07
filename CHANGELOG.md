@@ -12,6 +12,18 @@
 - Soundtrack: `TrackCard`, `TrackPlayer` and the embed helpers.
 - `ComingSoon`, `ComingSoonNote`, `SubmitButton`, `SignInWithOsu`, `formatShortDate`, `rovingKey`.
 - Demo sections for each.
+- `SkipLink`, and `SiteHeader`'s `skipTo` prop to render one before the logo.
+- `useFocusTrap`, `gridMove`, `ChartDataTable`, `INK_FALLBACK`, `AA_TEXT`, and an `ink` on each `MOD_COLORS` entry.
+
+### Fixed (accessibility pass)
+
+- `MobileMenu` moves focus into the drawer, keeps Tab inside it while open, and hands focus back to the toggle on close. The toggle has `aria-controls`.
+- `Select` hands focus back to its trigger after a pick or Escape; Tab closes the list and moves on instead of dropping focus.
+- `AvailabilityGrid`: the 72 hour cells are one Tab stop with arrow, Home and End navigation; hours keep a 24px minimum width (the grid scrolls sideways on narrow screens); the live region announces the picked runs instead of every hover.
+- Charts carry a visually hidden data table.
+- `Button`: `disabled={false}` no longer re-enables a pending button.
+- Contrast: the `osu` button is `pink-600` (white text was 3.6:1 on `pink-500`); `ModTag` text uses the lighter `ink`; `inkFor` falls back to black or white where neither brand ink reaches 4.5:1 (bark-400, fog-600 swatches); past `Timeline` cards dim their surface instead of their text.
+- Focus rings use `outline-hidden`, so a focus outline still shows in Windows forced-colors mode.
 
 ### Removed
 

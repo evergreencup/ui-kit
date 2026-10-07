@@ -6,7 +6,7 @@
  *       stays server-safe and keyboard-ready). Past entries dim until hovered. Server-safe.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import type { ReactNode } from "react";
@@ -63,7 +63,7 @@ const cardClasses = (entry: TimelineEntry): string =>
       : entry.status === "active"
         ? "border-evergreen-400/90 bg-evergreen-900/70"
         : "border-evergreen-700/70 bg-evergreen-950/70 hover:border-evergreen-500/80 hover:bg-evergreen-900/50",
-    entry.status === "past" && "opacity-60 focus-within:opacity-100 hover:opacity-100",
+    entry.status === "past" && !entry.finale && "border-evergreen-800/70 bg-evergreen-950/40",
   );
 
 const Node = ({ entry }: { entry: TimelineEntry }) =>

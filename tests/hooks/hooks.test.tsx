@@ -4,14 +4,19 @@
  *       counted useScrollLock.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { act, fireEvent, render, renderHook } from "@testing-library/react";
 import { useRef } from "react";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
-import { useEscapeKey, useOutsideClick, useScrollLock } from "../../src/hooks/useDismiss.js";
+import {
+  useEscapeKey,
+  useFocusTrap,
+  useOutsideClick,
+  useScrollLock,
+} from "../../src/hooks/useDismiss.js";
 import { useMediaQuery, useMotionEnabled } from "../../src/hooks/useMediaQuery.js";
 import { useMounted } from "../../src/hooks/useMounted.js";
 import { listenerCount, REDUCE, setMedia } from "../helpers/media.js";
@@ -106,5 +111,22 @@ describe("useScrollLock", () => {
     expect(document.body.style.overflow).toBe("hidden");
     b.unmount();
     expect(document.body.style.overflow).toBe("scroll");
+  });
+});
+
+describe("useFocusTrap", () => {
+  it("does nothing while inactive or before its element mounts", () => {
+    const outside = document.createElement("button");
+    document.body.append(outside);
+    outside.focus();
+    const { rerender, unmount } = renderHook(({ on }) => useFocusTrap({ current: null }, on), {
+      initialProps: { on: false },
+    });
+    rerender({ on: true });
+    fireEvent.keyDown(document, { key: "Tab" });
+    expect(outside).toHaveFocus();
+    unmount();
+    expect(outside).toHaveFocus();
+    outside.remove();
   });
 });

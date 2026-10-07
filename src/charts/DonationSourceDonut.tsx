@@ -5,7 +5,7 @@
  *       nothing has come in. Fills its parent (put it in a ChartCard).
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 "use client";
@@ -16,6 +16,7 @@ import { labelClasses } from "../components/basics/labelStyles.js";
 import { ChartLegend } from "../components/data/ChartTooltip.js";
 import { seriesColor } from "../components/data/chartTheme.js";
 import { formatUsd } from "../utils/format.js";
+import { ChartDataTable } from "./ChartDataTable.js";
 import { ChartEmpty } from "./ChartEmpty.js";
 import {
   type DonationSourceSlice,
@@ -31,17 +32,20 @@ export type DonationSourceDonutProps = ChartSize & {
   label?: string | undefined;
   /** When the total is zero (default "No donations logged yet."). */
   empty?: string | undefined;
+  /** The hidden data table's caption (default "Donations by source"). */
+  caption?: string | undefined;
 };
 
 /**
  * @function DonationSourceDonut
- * @param props {DonationSourceDonutProps} slices, label, empty and size
- * @returns {JSX.Element} the donut with its center total and legend
+ * @param props {DonationSourceDonutProps} slices, label, empty, caption and size
+ * @returns {JSX.Element} the donut with its center total, legend and sr-only data table
  */
 export const DonationSourceDonut = ({
   slices,
   label = "Raised",
   empty = "No donations logged yet.",
+  caption = "Donations by source",
   ...size
 }: DonationSourceDonutProps) => {
   const data: DonutDatum[] = slices.map((s, i) => ({
@@ -77,6 +81,11 @@ export const DonationSourceDonut = ({
           {formatUsd(total)}
         </span>
       </div>
+      <ChartDataTable
+        caption={caption}
+        columns={["Source", "Donations", "Amount"]}
+        rows={data.map((d) => [d.label, d.count.toString(), formatUsd(d.value)])}
+      />
       <ChartLegend
         className="absolute inset-x-0 bottom-0"
         rows={data.map((d) => ({ label: d.label, value: d.count.toString(), swatch: d.fill }))}

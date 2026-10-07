@@ -3,11 +3,19 @@
  * @desc colorMath.ts: hex parsing, luminance, contrast and ink choice.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { describe, expect, it } from "vitest";
-import { contrastRatio, hexToRgb, INK, inkFor, luminance } from "../../src/brand/colorMath.js";
+import {
+  AA_TEXT,
+  contrastRatio,
+  hexToRgb,
+  INK,
+  INK_FALLBACK,
+  inkFor,
+  luminance,
+} from "../../src/brand/colorMath.js";
 
 describe("colorMath", () => {
   it("parses long and short hex", () => {
@@ -31,5 +39,13 @@ describe("colorMath", () => {
   it("picks the ink with more contrast", () => {
     expect(inkFor("#eefaf1")).toBe(INK.dark);
     expect(inkFor("#051a0d")).toBe(INK.light);
+  });
+
+  it("falls back to black or white on mid-tones the brand inks miss", () => {
+    for (const hex of ["#8e6738", "#667579"]) {
+      expect(inkFor(hex)).toBe(INK_FALLBACK.light);
+      expect(contrastRatio(hex, inkFor(hex))).toBeGreaterThanOrEqual(AA_TEXT);
+    }
+    expect(inkFor("#7a7a7a")).toBe(INK_FALLBACK.dark);
   });
 });

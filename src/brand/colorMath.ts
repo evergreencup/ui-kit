@@ -1,14 +1,25 @@
 /**
  * @file src/brand/colorMath.ts
  * @desc WCAG color math on hex strings: relative luminance, contrast ratio, and which brand ink
- *       (Pitch or Fog) reads better on a background. Pure, server-safe.
+ *       (Pitch or Fog, else black or white) reads at AA on a background. Pure, server-safe.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
-/** The two inks text ever takes on a swatch: Pitch (evergreen-950) and Fog (fog-100). */
+/** The two brand inks text takes on a swatch: Pitch (evergreen-950) and Fog (fog-100). */
 export const INK = { dark: "#051a0d", light: "#edf2f4" } as const;
+
+/** Black and white, for the mid-tones where neither brand ink reaches 4.5:1. */
+export const INK_FALLBACK = { dark: "#000000", light: "#ffffff" } as const;
+
+/** WCAG AA for normal-size text. */
+export const AA_TEXT = 4.5;
+
+const better = (background: string, ink: { dark: string; light: string }): string =>
+  contrastRatio(background, ink.dark) >= contrastRatio(background, ink.light)
+    ? ink.dark
+    : ink.light;
 
 /**
  * @function hexToRgb
@@ -51,9 +62,10 @@ export const contrastRatio = (a: string, b: string): number => {
 /**
  * @function inkFor
  * @param background {string} a hex background
- * @returns {string} INK.dark or INK.light, whichever has the higher contrast on it
+ * @returns {string} INK.dark or INK.light, whichever has the higher contrast on it; when that
+ *          one is under 4.5:1, black or white instead
  */
-export const inkFor = (background: string): string =>
-  contrastRatio(background, INK.dark) >= contrastRatio(background, INK.light)
-    ? INK.dark
-    : INK.light;
+export const inkFor = (background: string): string => {
+  const ink = better(background, INK);
+  return contrastRatio(background, ink) >= AA_TEXT ? ink : better(background, INK_FALLBACK);
+};

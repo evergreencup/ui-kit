@@ -5,7 +5,7 @@
  *       (put it in a ChartCard).
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 "use client";
@@ -23,6 +23,7 @@ import {
 } from "recharts";
 import { AXIS, AXIS_TICK, CURSOR, GRID } from "../components/data/chartTheme.js";
 import { formatShortDate, formatUsd } from "../utils/format.js";
+import { ChartDataTable } from "./ChartDataTable.js";
 import {
   type CumulativeRaisedPoint,
   CumulativeRaisedTooltip,
@@ -34,6 +35,8 @@ import { type ChartSize, sizeProps } from "./size.js";
 export type CumulativeRaisedChartProps = ChartSize & {
   data: readonly CumulativeRaisedPoint[];
   goalUsdCents?: number | null | undefined;
+  /** The hidden data table's caption (default "Raised by day"). */
+  caption?: string | undefined;
 };
 
 /**
@@ -52,12 +55,13 @@ export const raisedDomainMax = (
 
 /**
  * @function CumulativeRaisedChart
- * @param props {CumulativeRaisedChartProps} data, goalUsdCents and size
- * @returns {JSX.Element} the responsive composed chart
+ * @param props {CumulativeRaisedChartProps} data, goalUsdCents, caption and size
+ * @returns {JSX.Element} the responsive composed chart and its sr-only data table
  */
 export const CumulativeRaisedChart = ({
   data,
   goalUsdCents = null,
+  caption = "Raised by day",
   ...size
 }: CumulativeRaisedChartProps) => {
   const gradient = `egc-raised-${useId().replace(/[^\w-]/g, "")}`;
@@ -67,48 +71,59 @@ export const CumulativeRaisedChart = ({
     cumulativeUsd: d.cumulativeUsdCents / 100,
   }));
   return (
-    <ResponsiveContainer width="100%" height="100%" {...sizeProps(size)}>
-      <ComposedChart data={rows} margin={{ top: 10, right: 12, left: 4, bottom: 4 }}>
-        <defs>
-          <linearGradient id={gradient} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--color-evergreen-400)" stopOpacity={0.55} />
-            <stop offset="100%" stopColor="var(--color-evergreen-500)" stopOpacity={0.02} />
-          </linearGradient>
-        </defs>
-        <CartesianGrid {...GRID} vertical={false} />
-        <XAxis
-          dataKey="day"
-          {...AXIS}
-          tick={AXIS_TICK}
-          tickFormatter={formatShortDate}
-          minTickGap={32}
-        />
-        <YAxis
-          {...AXIS}
-          tick={AXIS_TICK}
-          tickFormatter={(v: number) => formatUsd(v * 100)}
-          domain={[0, raisedDomainMax(data, goalUsdCents)]}
-          width={54}
-        />
-        <Tooltip cursor={CURSOR.line} content={<CumulativeRaisedTooltip />} />
-        <Bar
-          dataKey="dailyUsd"
-          fill={RAISED_COLORS.daily}
-          fillOpacity={0.35}
-          barSize={6}
-          radius={[2, 2, 0, 0]}
-          isAnimationActive={false}
-        />
-        <Area
-          type="monotone"
-          dataKey="cumulativeUsd"
-          stroke="var(--color-evergreen-300)"
-          strokeWidth={2}
-          fill={`url(#${gradient})`}
-          isAnimationActive={false}
-          activeDot={{ r: 4, stroke: "var(--color-evergreen-200)", strokeWidth: 2 }}
-        />
-      </ComposedChart>
-    </ResponsiveContainer>
+    <>
+      <ResponsiveContainer width="100%" height="100%" {...sizeProps(size)}>
+        <ComposedChart data={rows} margin={{ top: 10, right: 12, left: 4, bottom: 4 }}>
+          <defs>
+            <linearGradient id={gradient} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="var(--color-evergreen-400)" stopOpacity={0.55} />
+              <stop offset="100%" stopColor="var(--color-evergreen-500)" stopOpacity={0.02} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid {...GRID} vertical={false} />
+          <XAxis
+            dataKey="day"
+            {...AXIS}
+            tick={AXIS_TICK}
+            tickFormatter={formatShortDate}
+            minTickGap={32}
+          />
+          <YAxis
+            {...AXIS}
+            tick={AXIS_TICK}
+            tickFormatter={(v: number) => formatUsd(v * 100)}
+            domain={[0, raisedDomainMax(data, goalUsdCents)]}
+            width={54}
+          />
+          <Tooltip cursor={CURSOR.line} content={<CumulativeRaisedTooltip />} />
+          <Bar
+            dataKey="dailyUsd"
+            fill={RAISED_COLORS.daily}
+            fillOpacity={0.35}
+            barSize={6}
+            radius={[2, 2, 0, 0]}
+            isAnimationActive={false}
+          />
+          <Area
+            type="monotone"
+            dataKey="cumulativeUsd"
+            stroke="var(--color-evergreen-300)"
+            strokeWidth={2}
+            fill={`url(#${gradient})`}
+            isAnimationActive={false}
+            activeDot={{ r: 4, stroke: "var(--color-evergreen-200)", strokeWidth: 2 }}
+          />
+        </ComposedChart>
+      </ResponsiveContainer>
+      <ChartDataTable
+        caption={caption}
+        columns={["Day", "Raised that day", "Raised to date"]}
+        rows={data.map((d) => [
+          formatShortDate(d.day),
+          formatUsd(d.usdCents),
+          formatUsd(d.cumulativeUsdCents),
+        ])}
+      />
+    </>
   );
 };
