@@ -248,7 +248,7 @@ export default function Home() {
                 <StatusBadge key={s} status={s} />
               ))}
             </Row>
-            <FundingMeter raisedCents={124000} goalCents={100000} count={38} tiers={TIERS} />
+            <FundingMeter raisedCents={124000} goalCents={100000} count={38} />
             <StretchTiers goalCents={100000} raisedCents={124000} tiers={TIERS} />
             <AvailabilityDemo />
           </DemoSection>
