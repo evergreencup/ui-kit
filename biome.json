@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "includes": ["**", "!**/dist", "!**/coverage", "!**/node_modules"]
+    "includes": ["**", "!**/dist", "!**/coverage", "!**/node_modules", "!demo-out", "!**/.next"]
   },
   "formatter": {
     "enabled": true,
@@ -68,7 +68,7 @@
       }
     },
     {
-      "includes": ["scripts/consumer-fixture/**"],
+      "includes": ["demo/**"],
       "linter": {
         "rules": {
           "correctness": {

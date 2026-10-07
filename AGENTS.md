@@ -15,7 +15,7 @@
 - `src/site/egc.ts`: evergreencup.org's nav, CTA, account links, footer columns, socials and URLs.
 - `tests/`: mirrors `src/`. `tests/setup/dom.ts` installs a controllable `matchMedia` (`tests/helpers/media.ts`), `ResizeObserver`, a recording canvas context (`helpers/canvas.ts`) and a clipboard mock. `helpers/frames.ts` steps `requestAnimationFrame` by hand; `helpers/navigation.ts` holds the mocked route (each test file calls `vi.mock("next/navigation.js", ...)` itself, since `vi.mock` hoists per file); `helpers/axe.ts` is `expectNoAxeViolations`.
 - `tests/packaging.test.ts`: every file has the header; relative and `next/` imports end in `.js`; exactly the files calling hooks (other than `useId`) or `createPortal` start with `"use client"`; no hex colors in class strings.
-- `scripts/check-consumer.mjs` + `scripts/consumer-fixture/`: packs the kit into a throwaway Next.js app, builds it (prerendering catches server-to-client props that can't serialize) and checks the built CSS for the theme's tokens and utilities.
+- `scripts/check-consumer.mjs` + `demo/`: packs the kit into a throwaway copy of the demo app (also the GitHub Pages site; `--out` writes the export), builds it (prerendering catches server-to-client props that can't serialize) and checks the built CSS for the theme's tokens and utilities.
 
 ## Rules
 

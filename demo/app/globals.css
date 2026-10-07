@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "@evergreencup/ui-kit/theme.css";
+
+/* The layout loads the fonts from Google Fonts; these are the names the theme reads. */
+:root {
+  --font-big-shoulders: "Big Shoulders Display";
+  --font-geist-sans: "Geist";
+  --font-geist-mono: "Geist Mono";
+}

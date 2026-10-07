@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Added
+
+- A demo site in `demo/`, deployed to GitHub Pages, with every component group live and the Evergreen Cup banner on top. The consumer check now builds it.
+- MIT license, CI and Pages workflows.
+
 ## [0.1.0] - 2026-10-06
 
 ### Added

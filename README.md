@@ -1,10 +1,14 @@
+<p align="center"><a href="https://evergreencup.org"><img alt="Evergreen Cup" src="https://www.haruhime.moe/egc/skyline-poster.webp" width="720"></a></p>
+
 # @evergreencup/ui-kit
 
 The Evergreen Cup brand and React components for Next.js, in one package: the Pacific Northwest palette as a Tailwind 4 theme, the wordmark and conifer glyph, the layered PNW atmosphere backdrops, buttons, panels, form fields, the site header and footer, tables, chart frames, osu! mappool rows and the tournament pieces (availability grids, rosters, the crowdfund meter).
 
 Distilled from `evergreencup.org/apps/web`. Peer dependencies: Next.js 16, React 19, Tailwind CSS 4.1+. One runtime dependency: `tailwind-merge`.
 
-Not published. Use it from a workspace or a packed tarball:
+**[See every component live](https://evergreencup.github.io/ui-kit/).** The demo is the app in [`demo/`](./demo), built from the packed kit on every push to `main`.
+
+Not on npm yet. Use it from a packed tarball:
 
 ```sh
 bun run build && bun pm pack            # makes evergreencup-ui-kit-0.1.0.tgz
@@ -147,5 +151,10 @@ bun run check          # Biome
 bun run typecheck
 bun run test:coverage  # 100% lines, branches, functions, statements
 bun run build          # tsc to dist/, copies theme.css
-bun run check:consumer # packs the kit into a throwaway Next.js app, builds it, checks the CSS
+bun run check:consumer # packs the kit into a copy of demo/, builds it, checks the CSS
+bun run demo:build     # the same, then writes the static demo to demo-out/
 ```
+
+## License
+
+[MIT](./LICENSE). The Evergreen Cup name and marks belong to the Evergreen Cup. The banner art above is hosted on haruhime.moe and is not part of this repo.
