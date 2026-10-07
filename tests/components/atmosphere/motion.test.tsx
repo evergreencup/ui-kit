@@ -1,6 +1,6 @@
 /**
- * @file tests/components/atmosphere/scene.test.tsx
- * @desc Scene presets, Atmosphere's stacking, MapleLeafDrift, ParallaxScope and HeroVideo.
+ * @file tests/components/atmosphere/motion.test.tsx
+ * @desc MapleLeafDrift, ParallaxScope and HeroVideo.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
  * @modified Tue Oct 6, 2026
@@ -8,58 +8,14 @@
 
 import { act, fireEvent, render } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { Atmosphere } from "../../../src/components/atmosphere/Atmosphere.js";
 import { HeroVideo } from "../../../src/components/atmosphere/HeroVideo.js";
 import { MapleLeafDrift } from "../../../src/components/atmosphere/MapleLeafDrift.js";
 import { PARALLAX_EASE, ParallaxScope } from "../../../src/components/atmosphere/ParallaxScope.js";
-import { DEFAULT_SCENE, SCENE_PRESETS, scene } from "../../../src/components/atmosphere/presets.js";
 import { manualFrames } from "../../helpers/frames.js";
 import { REDUCE, setMedia } from "../../helpers/media.js";
 
 afterEach(() => {
   vi.restoreAllMocks();
-});
-
-describe("scene", () => {
-  it("resolves presets and custom overrides onto the default", () => {
-    expect(scene({})).toEqual(DEFAULT_SCENE);
-    expect(scene("stream").rain).toBe("heavy");
-    expect(scene("register")).toMatchObject({ snow: "light", rain: "none", stars: 20 });
-    expect(scene({ stars: 3 }).stars).toBe(3);
-    for (const name of Object.keys(SCENE_PRESETS))
-      expect(scene(name as keyof typeof SCENE_PRESETS).skyTintMid).toBeTruthy();
-  });
-});
-
-describe("Atmosphere", () => {
-  it("stacks the home scene: mountain, skyline, mists, trees, rain and the leaf", () => {
-    const { container } = render(<Atmosphere className="opacity-80" />);
-    const root = container.firstElementChild as HTMLElement;
-    expect(root).toHaveAttribute("aria-hidden", "true");
-    expect(root).toHaveClass("absolute", "opacity-80");
-    expect(container.querySelectorAll(".mist-drift")).toHaveLength(2);
-    expect(container.querySelectorAll("canvas")).toHaveLength(1);
-    expect(container.querySelector(".leaf-drift")).toBeInTheDocument();
-    expect(container.querySelectorAll("ellipse")).toHaveLength(1);
-  });
-
-  it("drops what a preset hides and adds snow", () => {
-    const { container } = render(
-      <Atmosphere
-        variant={{ ...SCENE_PRESETS.forest, mistA: false, mistB: false, snow: "heavy" }}
-      />,
-    );
-    expect(container.querySelector("ellipse")).toBeNull();
-    expect(container.querySelectorAll(".mist-drift")).toHaveLength(0);
-    expect(container.querySelectorAll("canvas")).toHaveLength(1);
-    expect(container.querySelector(".leaf-drift")).toBeNull();
-  });
-
-  it("wraps the layers in a ParallaxScope on request", () => {
-    const { container } = render(<Atmosphere variant="rules" parallax />);
-    expect(container.firstElementChild).toHaveAttribute("aria-hidden", "true");
-    expect(container.querySelectorAll(".mist-drift")).toHaveLength(2);
-  });
 });
 
 describe("MapleLeafDrift", () => {

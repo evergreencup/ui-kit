@@ -16,20 +16,12 @@ export * from "./brand/glyphs.js";
 export * from "./brand/identity.js";
 export * from "./brand/palette.js";
 // Components: atmosphere
-export * from "./components/atmosphere/Atmosphere.js";
 export * from "./components/atmosphere/HeroVideo.js";
 export * from "./components/atmosphere/MapleLeafDrift.js";
-export * from "./components/atmosphere/MistBand.js";
-export * from "./components/atmosphere/MountRainier.js";
 export * from "./components/atmosphere/ParallaxScope.js";
 export * from "./components/atmosphere/ParticleLayer.js";
 export * from "./components/atmosphere/parallax.js";
 export * from "./components/atmosphere/particles.js";
-export * from "./components/atmosphere/presets.js";
-export * from "./components/atmosphere/SeattleSkyline.js";
-export * from "./components/atmosphere/Sky.js";
-export * from "./components/atmosphere/TreeLine.js";
-export * from "./components/atmosphere/trees.js";
 export * from "./components/atmosphere/Weather.js";
 // Components: basics
 export * from "./components/basics/AutoLink.js";

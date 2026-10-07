@@ -168,14 +168,12 @@ describe("PageHero", () => {
     await expectNoAxeViolations(container);
   });
 
-  it("takes an atmosphere or media backdrop and the tall size", () => {
-    const { container, rerender } = render(<PageHero title="T" atmosphere="pools" size="tall" />);
-    expect(container.querySelector(".mist-drift")).toBeInTheDocument();
-    expect(container.querySelector("section > div:last-child")).toHaveClass("min-h-[24rem]");
-    rerender(
-      <PageHero title="T" atmosphere="pools" media={<HeroMediaPlaceholder label="Pools" />} />,
+  it("takes a media backdrop and the tall size", () => {
+    const { container } = render(
+      <PageHero title="T" size="tall" media={<HeroMediaPlaceholder label="Pools" />} />,
     );
-    expect(container.querySelector(".mist-drift")).toBeNull();
+    expect(container.querySelector("section > div:last-child")).toHaveClass("min-h-[24rem]");
+    expect(container.querySelector(".from-cascade-900\\/30")).toBeNull();
     expect(screen.getByText("Pools")).toBeInTheDocument();
     expect(screen.getByText("Evergreen Cup")).toBeInTheDocument();
   });

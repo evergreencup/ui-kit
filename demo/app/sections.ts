@@ -1,6 +1,6 @@
 /**
  * @file demo/app/sections.ts
- * @desc The demo's sections, in order: the table of contents and the header nav both read this.
+ * @desc The demo's sections, in order, numbered.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
  * @modified Tue Oct 6, 2026
@@ -12,7 +12,6 @@ export const SECTIONS = [
   { id: "forms", title: "Forms" },
   { id: "data", title: "Data" },
   { id: "tournament", title: "Tournament" },
-  { id: "atmosphere", title: "Atmosphere" },
   { id: "osu", title: "osu!" },
   { id: "icons", title: "Icons" },
 ].map((s, i) => ({ ...s, num: String(i + 1).padStart(2, "0") }));

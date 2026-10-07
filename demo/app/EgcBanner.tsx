@@ -14,7 +14,7 @@ const ART = "https://www.haruhime.moe/egc";
 
 export function EgcBanner() {
   return (
-    <Container width="full" className="pt-4">
+    <Container width="wide" className="pt-6">
       <section
         aria-label={BRAND.name}
         className="relative isolate flex aspect-[2/1] overflow-hidden rounded-lg border border-evergreen-800/60 sm:aspect-[3/1] lg:aspect-[5/1]"

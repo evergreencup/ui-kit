@@ -2,11 +2,11 @@
 
 # @evergreencup/ui-kit
 
-The Evergreen Cup brand and React components for Next.js, in one package: the Pacific Northwest palette as a Tailwind 4 theme, the wordmark and conifer glyph, the layered PNW atmosphere backdrops, buttons, panels, form fields, the site header and footer, tables, chart frames, osu! mappool rows and the tournament pieces (availability grids, rosters, the crowdfund meter).
+The Evergreen Cup brand and React components for Next.js, in one package: the Pacific Northwest palette as a Tailwind 4 theme, the wordmark and conifer glyph, the hero video and weather layers, buttons, panels, form fields, the site header and footer, tables, chart frames, osu! mappool rows and the tournament pieces (availability grids, rosters, the crowdfund meter).
 
 Distilled from `evergreencup.org/apps/web`. Peer dependencies: Next.js 16, React 19, Tailwind CSS 4.1+. One runtime dependency: `tailwind-merge`.
 
-**[See every component live](https://evergreencup.github.io/ui-kit/).** The demo is the app in [`demo/`](./demo), built from the packed kit on every push to `main`.
+**[See the example components](https://evergreencup.github.io/ui-kit/).** The demo is the app in [`demo/`](./demo), built from the packed kit on every push to `main`.
 
 Not on npm yet. Use it from a packed tarball:
 
@@ -24,7 +24,7 @@ bun add ./evergreencup-ui-kit-0.1.0.tgz # in the app
 @import "@evergreencup/ui-kit/theme.css";
 ```
 
-The theme defines the palettes (`evergreen`, `cascade`, `bark`, `moss`, `fog`, `rain`), the semantic tokens (`background`, `surface`, `surface-elevated`, `foreground`, `muted`, `accent`), the `font-display` utility, the atmosphere animations (`sway-left`, `sway-right`, `mist-drift`, `leaf-drift`), `active-underline`, `parallax-layer`, `diag-stripes`, the `coarse:` variant, one reduced-motion rule, and the dark page background. Its `@source "./"` line points Tailwind at the kit's compiled files, so every class the components use is generated.
+The theme defines the palettes (`evergreen`, `cascade`, `bark`, `moss`, `fog`, `rain`), the semantic tokens (`background`, `surface`, `surface-elevated`, `foreground`, `muted`, `accent`), the `font-display` utility, the `leaf-drift` animation, `active-underline`, `parallax-layer`, `diag-stripes`, the `coarse:` variant, one reduced-motion rule, and the dark page background. Its `@source "./"` line points Tailwind at the kit's compiled files, so every class the components use is generated.
 
 **2. Fonts.** All three come from `next/font/google`. The kit ships no font files or art.
 
@@ -89,7 +89,7 @@ import { Container, PageHero, Section, Toc, DataTable, Notice, ButtonLink } from
 export default function RulesPage() {
   return (
     <>
-      <PageHero eyebrow="Rules" title="How the cup runs" lead="Format, mod buckets and match procedure." atmosphere="rules">
+      <PageHero eyebrow="Rules" title="How the cup runs" lead="Format, mod buckets and match procedure.">
         <ButtonLink href="/register" size="lg">Register</ButtonLink>
       </PageHero>
       <Container className="grid gap-10 py-16 lg:grid-cols-[14rem_1fr]">
@@ -126,7 +126,7 @@ Everything is exported from `@evergreencup/ui-kit` (server-safe barrel: client f
 | Basics | `Button` and `ButtonLink` (variants `primary`, `outline`, `ghost`, `icon`, `osu`; sizes `sm`, `md`, `lg`; `pill`; `pending`), `AutoLink`, `TextLink`, `Panel`, `Container`, `Section`, `DisplayHeading`, `Eyebrow`, `Badge`, `Notice`, `Stat`, `ProgressBar`, `Highlight`, `CopyButton` (client) |
 | Class builders | `buttonClasses`, `panelClasses`, `labelClasses`, `headingClasses`, `chipClasses`, `fieldClasses`, plus `FOCUS_RING`, `HAIRLINE`, `DIVIDER`, `GUTTERS`, `CONTAINER_WIDTHS`, `LINK_CLASSES`, `STATUS_TONE_CLASSES` |
 | Brand | `Wordmark` (full, short, icon), `HeaderWordmark`, `ConiferGlyph`, `MapleLeafGlyph`, `PnwArrows`, `Lockup`, `SprigStripe`, `SwatchTile`, `PaletteGrid`, `TypeSpecimen`, `TokenRow`, `BrandKit` (the whole brand page body) |
-| Atmosphere | `Atmosphere` (presets: `home`, `rules`, `pools`, `schedule`, `teams`, `stream`, `donate`, `contributors`, `register`, `soundtrack`, `brand`, `forest`, or scene overrides), `HeroVideo` (client), `Sky`, `MountRainier`, `SeattleSkyline`, `MistBand`, `TreeLine`, `RainLayer`, `SnowLayer`, `ParticleLayer` (client), `MapleLeafDrift` (client), `ParallaxScope` (client), `scene()`, `SCENE_PRESETS` |
+| Atmosphere | `HeroVideo` (client), `RainLayer`, `SnowLayer`, `ParticleLayer` (client), `MapleLeafDrift` (client), `ParallaxScope` (client) |
 | Forms | `TextInput`, `Textarea`, `Select` (client listbox), `Checkbox`, `FormField`, `ToggleChips`, `ChoiceChips`, `OptionCards`, `ChipButton`, `PickerGroup`. Text fields and Select take an optional `label`; with it they render inside `FormField` wired to `hint` and `error` |
 | Layout | `SiteHeader`, `SiteFooter`, `MobileMenu` (client), `NavLink` (client), `SocialLinks`, `PageHero`, `HeroMediaPlaceholder`, `AccountPill`, `isActivePath`, `byLabelLength` |
 | Data | `DataTable`, `Toc`, `Timeline` (schedule rail with statuses, finale and expandable details), `StatBand`, `TwitchEmbed` + `twitchPlayerUrl`, `ChartCard`, `ChartTooltip`, `ChartLegend`, and `chartTheme` values (`SERIES_COLORS`, `seriesColor`, `AXIS`, `AXIS_TICK`, `CATEGORY_TICK`, `GRID`, `CURSOR`) to spread into Recharts or any SVG chart library |

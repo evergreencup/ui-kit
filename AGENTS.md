@@ -5,13 +5,13 @@
 ## Layout
 
 - `src/index.ts`: the barrel (`export *` per public file, grouped). `src/mdx.ts` and `src/site.ts` are the `./mdx` and `./site` subpaths.
-- `src/theme.css`: the palette, semantic tokens, `font-display`, the atmosphere utilities and keyframes, `active-underline`, `parallax-layer`, `diag-stripes`, the `coarse:` variant, the one reduced-motion rule, the page background, and `@source "./"`.
+- `src/theme.css`: the palette, semantic tokens, `font-display`, the `leaf-drift` animation, `active-underline`, `parallax-layer`, `diag-stripes`, the `coarse:` variant, the one reduced-motion rule, the page background, and `@source "./"`.
 - `src/brand/`: brand data, no React. `palette.ts` is the single source of every hex (theme.css mirrors it; `tests/theme.test.ts` keeps them equal), `identity.ts` (names, regions, fonts), `glyphs.ts` (marks as data, favicon and sprig builders), `colorMath.ts`, `brandText.ts`.
 - `src/utils/`: `cx` (tailwind-merge), `format`, `href`, `random` (mulberry32, so seeded layers render the same on server and client), `slug`.
 - `src/hooks/`: client hooks: `useMediaQuery`/`useMotionEnabled`, `useMounted`, `useDismiss` (`useEscapeKey`, `useOutsideClick`, counted `useScrollLock`).
 - `src/components/<group>/`: one component per file. Groups: `basics`, `brand`, `atmosphere`, `forms`, `layout`, `icons`, `data`, `osu`, `tournament`, `mdx`.
 - `*Styles.ts` files hold the class builders and constants components share: `buttonStyles` (`buttonClasses`), `panelStyles` (`panelClasses`, `HAIRLINE`, `DIVIDER`), `labelStyles` (`labelClasses`), `headingStyles` (`headingClasses`), `chipStyles` (`chipClasses`), `badgeStyles` (`STATUS_TONE_CLASSES`), `linkStyles`, `focusStyles` (`FOCUS_RING`), `forms/fieldStyles`, `forms/chipGroupStyles` (`PICKER_GRID`, `toggleValue`), `tournament/gridStyles`.
-- Pure logic lives beside its component and is tested directly: `atmosphere/trees.ts`, `atmosphere/particles.ts` (engines), `atmosphere/presets.ts` (scenes as overrides of one default), `forms/selectKeys.ts`, `tournament/availability.ts`, `osu/osuLinks.ts`, `osu/modColors.ts`, `layout/nav.ts`.
+- Pure logic lives beside its component and is tested directly: `atmosphere/particles.ts` (engines), `forms/selectKeys.ts`, `tournament/availability.ts`, `osu/osuLinks.ts`, `osu/modColors.ts`, `layout/nav.ts`.
 - `src/site/egc.ts`: evergreencup.org's nav, CTA, account links, footer columns, socials and URLs.
 - `tests/`: mirrors `src/`. `tests/setup/dom.ts` installs a controllable `matchMedia` (`tests/helpers/media.ts`), `ResizeObserver`, a recording canvas context (`helpers/canvas.ts`) and a clipboard mock. `helpers/frames.ts` steps `requestAnimationFrame` by hand; `helpers/navigation.ts` holds the mocked route (each test file calls `vi.mock("next/navigation.js", ...)` itself, since `vi.mock` hoists per file); `helpers/axe.ts` is `expectNoAxeViolations`.
 - `tests/packaging.test.ts`: every file has the header; relative and `next/` imports end in `.js`; exactly the files calling hooks (other than `useId`) or `createPortal` start with `"use client"`; no hex colors in class strings.

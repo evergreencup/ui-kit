@@ -97,38 +97,8 @@
   --color-muted: var(--color-fog-300);
   --color-accent: var(--color-evergreen-400);
 
-  --animate-sway-left: sway-left var(--sway-duration, 6s) ease-in-out var(--sway-delay, 0s) infinite;
-  --animate-sway-right: sway-right var(--sway-duration, 7s) ease-in-out var(--sway-delay, 0s)
-    infinite;
-  --animate-mist-drift: mist-drift 28s ease-in-out infinite alternate;
   --animate-leaf-drift: leaf-drift 22s linear var(--leaf-delay, 0s) infinite;
 
-  @keyframes sway-left {
-    0%,
-    100% {
-      transform: rotate(-0.8deg) translateY(0);
-    }
-    50% {
-      transform: rotate(0.6deg) translateY(-2px);
-    }
-  }
-  @keyframes sway-right {
-    0%,
-    100% {
-      transform: rotate(0.6deg) translateY(-1px);
-    }
-    50% {
-      transform: rotate(-0.8deg) translateY(0);
-    }
-  }
-  @keyframes mist-drift {
-    0% {
-      transform: translate3d(-4%, 0, 0);
-    }
-    100% {
-      transform: translate3d(4%, 0, 0);
-    }
-  }
   @keyframes leaf-drift {
     0% {
       transform: translate3d(0, -6vh, 0) rotate(-6deg);
@@ -153,23 +123,6 @@
       transform: scaleX(1);
     }
   }
-}
-
-@utility sway-left {
-  animation: var(--animate-sway-left);
-  transform-origin: bottom;
-}
-@utility sway-right {
-  animation: var(--animate-sway-right);
-  transform-origin: bottom;
-}
-@utility mist-drift {
-  animation: var(--animate-mist-drift);
-  will-change: transform;
-}
-@utility leaf-drift {
-  animation: var(--animate-leaf-drift);
-  will-change: transform, opacity;
 }
 
 /* The active nav link's underline: grows in from the left under the label. */
@@ -215,9 +168,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sway-left,
-  .sway-right,
-  .mist-drift,
   .leaf-drift {
     animation: none !important;
   }

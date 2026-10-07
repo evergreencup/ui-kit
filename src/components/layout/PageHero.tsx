@@ -1,8 +1,7 @@
 /**
  * @file src/components/layout/PageHero.tsx
  * @desc The page header band: an eyebrow, the display title, a lead, optional actions, over a
- *       backdrop (an Atmosphere preset, a HeroVideo or placeholder via `media`, or a quiet cascade
- *       gradient). `tall` anchors the copy low for full-scene video. Server-safe.
+ *       backdrop (a HeroVideo or placeholder via `media`, or a quiet cascade gradient). `tall` anchors the copy low for full-scene video. Server-safe.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
  * @modified Tue Oct 6, 2026
@@ -10,7 +9,6 @@
 
 import type { ReactNode } from "react";
 import { cx } from "../../utils/cx.js";
-import { Atmosphere, type AtmosphereProps } from "../atmosphere/Atmosphere.js";
 import { Container } from "../basics/Container.js";
 import { Eyebrow } from "../basics/Eyebrow.js";
 import { headingClasses } from "../basics/headingStyles.js";
@@ -25,9 +23,7 @@ export type PageHeroProps = {
   lead?: ReactNode;
   /** Buttons or links in a wrapping row under the lead. */
   children?: ReactNode;
-  /** An Atmosphere preset or scene overrides for the backdrop. */
-  atmosphere?: AtmosphereProps["variant"];
-  /** An absolutely positioned backdrop (HeroVideo, HeroMediaPlaceholder). Wins over atmosphere. */
+  /** An absolutely positioned backdrop (HeroVideo, HeroMediaPlaceholder). */
   media?: ReactNode;
   size?: "default" | "tall" | undefined;
 };
@@ -40,7 +36,7 @@ const SIZES = {
 /**
  * @function PageHero
  * @param props {PageHeroProps} title, eyebrow, eyebrowTone (default "evergreen"), lead, children,
- *        atmosphere, media and size (default "default")
+ *        media and size (default "default")
  * @returns {JSX.Element} the hero section, its title the page's h1
  */
 export const PageHero = ({
@@ -49,20 +45,16 @@ export const PageHero = ({
   eyebrowTone = "evergreen",
   lead,
   children,
-  atmosphere,
   media,
   size = "default",
 }: PageHeroProps) => (
   <section className={cx("relative isolate flex flex-col overflow-hidden border-b", HAIRLINE)}>
-    {media ??
-      (atmosphere ? (
-        <Atmosphere variant={atmosphere} />
-      ) : (
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-gradient-to-b from-cascade-900/30 via-evergreen-950 to-evergreen-950"
-        />
-      ))}
+    {media ?? (
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-gradient-to-b from-cascade-900/30 via-evergreen-950 to-evergreen-950"
+      />
+    )}
     <Container className={cx("relative z-10 flex flex-col gap-4", SIZES[size])}>
       {eyebrow ? (
         <Eyebrow as="p" tone={eyebrowTone} className="font-sans text-xs tracking-[0.25em]">

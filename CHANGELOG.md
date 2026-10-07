@@ -4,8 +4,12 @@
 
 ### Added
 
-- A demo site in `demo/`, deployed to GitHub Pages, with every component group live and the Evergreen Cup banner on top. The consumer check now builds it.
+- A demo site in `demo/`, deployed to GitHub Pages, with example components and the Evergreen Cup banner on top. The consumer check now builds it.
 - MIT license, CI and Pages workflows.
+
+### Removed
+
+- The placeholder scenery: `Atmosphere`, `SCENE_PRESETS`, `scene()`, `Sky`, `MountRainier`, `SeattleSkyline`, `MistBand`, `TreeLine`, the tree generator, the `sway-left`, `sway-right` and `mist-drift` animations, and `PageHero`'s `atmosphere` prop. They were stand-ins for the artists' work.
 
 ## [0.1.0] - 2026-10-06
 

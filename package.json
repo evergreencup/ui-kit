@@ -2,7 +2,7 @@
   "name": "@evergreencup/ui-kit",
   "version": "0.1.0",
   "private": true,
-  "description": "Evergreen Cup brand and React components for Next.js: the Pacific Northwest palette as a Tailwind 4 theme, the wordmark and conifer glyph, layered PNW atmosphere backdrops, buttons, panels, form fields, the site header and footer, tables, chart frames, osu! mappool rows and tournament pieces.",
+  "description": "Evergreen Cup brand and React components for Next.js: the Pacific Northwest palette as a Tailwind 4 theme, the wordmark and conifer glyph, the hero video and weather layers, buttons, panels, form fields, the site header and footer, tables, chart frames, osu! mappool rows and tournament pieces.",
   "license": "MIT",
   "author": "David (https://dvh.sh)",
   "homepage": "https://evergreencup.github.io/ui-kit/",
