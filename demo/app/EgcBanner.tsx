@@ -1,14 +1,15 @@
 /**
  * @file demo/app/EgcBanner.tsx
  * @desc The Evergreen Cup banner from haruhime.moe's homepage, rebuilt from the kit: the Seattle
- *       skyline loop through HeroVideo, the name, the line and a link to evergreencup.org. The
+ *       skyline loop through HeroVideo, the name, the line and a link to evergreencup.org, with a
+ *       MotionToggle to pause the loop. The
  *       art is hotlinked from haruhime.moe, so this repo carries none of it.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
-import { BRAND, ButtonLink, Container, HeroVideo } from "@evergreencup/ui-kit";
+import { BRAND, ButtonLink, Container, HeroVideo, MotionToggle } from "@evergreencup/ui-kit";
 
 const ART = "https://www.haruhime.moe/egc";
 
@@ -32,6 +33,7 @@ export function EgcBanner() {
             {BRAND.domain}
           </ButtonLink>
         </div>
+        <MotionToggle className="absolute right-3 bottom-3" />
       </section>
     </Container>
   );

@@ -106,7 +106,20 @@ export const Select = ({
   const current = options.find((o) => o.value === value);
 
   return (
-    <MaybeField {...field}>
+    <MaybeField
+      {...field}
+      label={
+        // A button can't take aria-required, so the name says it; the asterisk is aria-hidden.
+        field.required && field.label !== undefined ? (
+          <>
+            {field.label}
+            <span className="sr-only">{" (required)"}</span>
+          </>
+        ) : (
+          field.label
+        )
+      }
+    >
       <div ref={root} className={cx("relative", className)}>
         {name ? <input type="hidden" name={name} value={value} /> : null}
         <button

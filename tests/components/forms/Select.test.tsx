@@ -94,6 +94,18 @@ describe("Select", () => {
     expect(trigger).toHaveFocus();
   });
 
+  it("says required in the trigger's name when required", () => {
+    const { rerender } = render(
+      <Select id="r" label="Region" required value="" options={OPTIONS} onChange={vi.fn()} />,
+    );
+    // jsdom's name computation drops the space a browser keeps before "(required)".
+    expect(screen.getByRole("button", { name: /^Region\s?\(required\)$/ })).toBeInTheDocument();
+    rerender(
+      <Select id="r" aria-label="Region" required value="" options={OPTIONS} onChange={vi.fn()} />,
+    );
+    expect(screen.getByRole("button", { name: "Region" })).toBeInTheDocument();
+  });
+
   it("closes on Tab and lets focus move on to the next control", async () => {
     const user = userEvent.setup();
     render(

@@ -5,7 +5,7 @@
  *       factory. Server-safe.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 import { createIcon, type IconShape } from "./Icon.js";
@@ -49,6 +49,8 @@ export const ICON_SHAPES = {
   check: stroke("M20 6 9 17l-5-5"),
   arrowRight: stroke("M5 12h14", "m12 5 7 7-7 7"),
   external: stroke("M7 17 17 7", "M7 7h10v10"),
+  pause: brand("M6 4h4v16H6zM14 4h4v16h-4z"),
+  play: brand("M7 4v16l13-8z"),
   star: brand("M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"),
 } as const satisfies Record<string, IconShape>;
 
@@ -68,3 +70,5 @@ export const CheckIcon = createIcon(ICON_SHAPES.check, "CheckIcon");
 export const ArrowRightIcon = createIcon(ICON_SHAPES.arrowRight, "ArrowRightIcon");
 export const ExternalIcon = createIcon(ICON_SHAPES.external, "ExternalIcon");
 export const StarIcon = createIcon(ICON_SHAPES.star, "StarIcon");
+export const PauseIcon = createIcon(ICON_SHAPES.pause, "PauseIcon");
+export const PlayIcon = createIcon(ICON_SHAPES.play, "PlayIcon");

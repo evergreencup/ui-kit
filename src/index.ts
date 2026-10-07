@@ -19,6 +19,7 @@ export * from "./brand/palette.js";
 // Components: atmosphere
 export * from "./components/atmosphere/HeroVideo.js";
 export * from "./components/atmosphere/MapleLeafDrift.js";
+export * from "./components/atmosphere/MotionToggle.js";
 export * from "./components/atmosphere/ParallaxScope.js";
 export * from "./components/atmosphere/ParticleLayer.js";
 export * from "./components/atmosphere/parallax.js";
@@ -142,6 +143,7 @@ export * from "./components/tournament/statuses.js";
 // Hooks
 export * from "./hooks/useDismiss.js";
 export * from "./hooks/useMediaQuery.js";
+export * from "./hooks/useMotionPause.js";
 export * from "./hooks/useMounted.js";
 // Utilities
 export * from "./utils/cx.js";

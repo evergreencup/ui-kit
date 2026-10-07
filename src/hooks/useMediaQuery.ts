@@ -4,12 +4,13 @@
  *       flips, and reads the server value (default false) during SSR and hydration.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
- * @modified Tue Oct 6, 2026
+ * @modified Wed Oct 7, 2026
  */
 
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { useMotionPaused } from "./useMotionPause.js";
 
 /**
  * @function useMediaQuery
@@ -35,7 +36,12 @@ export const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 
 /**
  * @function useMotionEnabled
- * @returns {boolean} true once mounted on a client that has not asked for reduced motion; false on
- *          the server, so animated layers never render into the HTML
+ * @returns {boolean} true once mounted on a client that has not asked for reduced motion and has
+ *          not paused it with MotionToggle; false on the server, so animated layers never render
+ *          into the HTML
  */
-export const useMotionEnabled = (): boolean => !useMediaQuery(REDUCED_MOTION, true);
+export const useMotionEnabled = (): boolean => {
+  const reduced = useMediaQuery(REDUCED_MOTION, true);
+  const paused = useMotionPaused();
+  return !reduced && !paused;
+};
