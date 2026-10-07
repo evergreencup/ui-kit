@@ -40,6 +40,8 @@ try {
         next: dev.next,
         react: dev.react,
         "react-dom": dev["react-dom"],
+        // The demo shows the ./charts subpath, so the optional recharts peer goes in too.
+        recharts: dev.recharts,
         tailwindcss: dev.tailwindcss,
         typescript: "5.9.3",
         "@types/react": dev["@types/react"],
@@ -66,6 +68,7 @@ try {
     "pointer:coarse",
     "has-focus-visible",
     "not-disabled",
+    "@container",
   ];
   const missing = expected.filter((needle) => !css.includes(needle));
   if (missing.length > 0) throw new Error(`built CSS is missing: ${missing.join(", ")}`);

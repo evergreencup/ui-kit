@@ -19,7 +19,7 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       include: ["src/**/*.{ts,tsx}"],
-      exclude: ["src/index.ts", "src/mdx.ts", "src/site.ts"],
+      exclude: ["src/index.ts", "src/mdx.ts", "src/site.ts", "src/charts/index.ts"],
       reporter: ["text", "html"],
       thresholds: { lines: 100, functions: 100, branches: 100, statements: 100 },
     },

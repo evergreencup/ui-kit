@@ -1,7 +1,7 @@
 /**
  * @file src/utils/format.ts
  * @desc Display formatters the cup's pages share: whole-dollar USD from cents, m:ss lengths,
- *       counted nouns, zero-padded counters and percentages. Pure, server-safe.
+ *       counted nouns, zero-padded counters, percentages and short dates. Pure, server-safe.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
  * @modified Tue Oct 6, 2026
@@ -51,3 +51,13 @@ export const padCount = (n: number, width = 3): string => n.toString().padStart(
  */
 export const percentOf = (value: number, total: number): number =>
   total > 0 ? Math.min(100, Math.max(0, (value / total) * 100)) : 0;
+
+/**
+ * @function formatShortDate
+ * @param date {Date | string} a date, or an ISO string ("2026-10-06" is read as that UTC day)
+ * @returns {string} month and day in UTC, e.g. "Oct 6"
+ */
+export const formatShortDate = (date: Date | string): string =>
+  new Date(
+    typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date) ? `${date}T00:00:00Z` : date,
+  ).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });

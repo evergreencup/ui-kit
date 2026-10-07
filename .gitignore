@@ -5,3 +5,4 @@ coverage
 demo-out
 .next
 next-env.d.ts
+scripts/data

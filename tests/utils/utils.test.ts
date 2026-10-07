@@ -1,6 +1,6 @@
 /**
  * @file tests/utils/utils.test.ts
- * @desc cx, random, format, href and slug: the pure helpers.
+ * @desc cx, random, format, href, roving and slug: the pure helpers.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
  * @modified Tue Oct 6, 2026
@@ -8,9 +8,17 @@
 
 import { describe, expect, it } from "vitest";
 import { cx } from "../../src/utils/cx.js";
-import { formatMmSs, formatUsd, padCount, percentOf, plural } from "../../src/utils/format.js";
+import {
+  formatMmSs,
+  formatShortDate,
+  formatUsd,
+  padCount,
+  percentOf,
+  plural,
+} from "../../src/utils/format.js";
 import { isExternalHref } from "../../src/utils/href.js";
 import { mulberry32, randRange } from "../../src/utils/random.js";
+import { rovingKey } from "../../src/utils/roving.js";
 import { slugify } from "../../src/utils/slug.js";
 
 describe("cx", () => {
@@ -72,5 +80,23 @@ describe("slugify", () => {
   it("makes kebab-case anchors", () => {
     expect(slugify("Photography & recording")).toBe("photography-and-recording");
     expect(slugify("  What's next?  ")).toBe("what-s-next");
+  });
+});
+
+describe("formatShortDate and rovingKey", () => {
+  it("prints UTC month and day from ISO days, timestamps and Dates", () => {
+    expect(formatShortDate("2026-10-06")).toBe("Oct 6");
+    expect(formatShortDate("2026-10-06T23:30:00Z")).toBe("Oct 6");
+    expect(formatShortDate(new Date(Date.UTC(2026, 0, 2)))).toBe("Jan 2");
+  });
+
+  it("steps, wraps and jumps", () => {
+    expect(rovingKey("ArrowRight", 0, 3)).toBe(1);
+    expect(rovingKey("ArrowDown", 2, 3)).toBe(0);
+    expect(rovingKey("ArrowLeft", 0, 3)).toBe(2);
+    expect(rovingKey("ArrowUp", 1, 3)).toBe(0);
+    expect(rovingKey("Home", 2, 3)).toBe(0);
+    expect(rovingKey("End", 0, 3)).toBe(2);
+    expect(rovingKey("a", 0, 3)).toBeNull();
   });
 });

@@ -127,13 +127,35 @@ Everything is exported from `@evergreencup/ui-kit` (server-safe barrel: client f
 | Class builders | `buttonClasses`, `panelClasses`, `labelClasses`, `headingClasses`, `chipClasses`, `fieldClasses`, plus `FOCUS_RING`, `HAIRLINE`, `DIVIDER`, `GUTTERS`, `CONTAINER_WIDTHS`, `LINK_CLASSES`, `STATUS_TONE_CLASSES` |
 | Brand | `Wordmark` (full, short, icon), `HeaderWordmark`, `ConiferGlyph`, `MapleLeafGlyph`, `PnwArrows`, `Lockup`, `SprigStripe`, `SwatchTile`, `PaletteGrid`, `TypeSpecimen`, `TokenRow`, `BrandKit` (the whole brand page body) |
 | Atmosphere | `HeroVideo` (client), `RainLayer`, `SnowLayer`, `ParticleLayer` (client), `MapleLeafDrift` (client), `ParallaxScope` (client) |
-| Forms | `TextInput`, `Textarea`, `Select` (client listbox), `Checkbox`, `FormField`, `ToggleChips`, `ChoiceChips`, `OptionCards`, `ChipButton`, `PickerGroup`. Text fields and Select take an optional `label`; with it they render inside `FormField` wired to `hint` and `error` |
-| Layout | `SiteHeader`, `SiteFooter`, `MobileMenu` (client), `NavLink` (client), `SocialLinks`, `PageHero`, `HeroMediaPlaceholder`, `AccountPill`, `isActivePath`, `byLabelLength` |
+| Forms | `TextInput`, `Textarea`, `Select` (client listbox), `Checkbox`, `FormField`, `ToggleChips`, `ChoiceChips`, `OptionCards`, `ChipButton`, `PickerGroup`, `SubmitButton` (client, pending while its form's action runs). Text fields and Select take an optional `label`; with it they render inside `FormField` wired to `hint` and `error` |
+| Layout | `SiteHeader`, `SiteFooter`, `MobileMenu` (client), `NavLink` (client), `SocialLinks`, `PageHero`, `HeroMediaPlaceholder`, `AccountPill`, `ComingSoon`, `ComingSoonNote`, `isActivePath`, `byLabelLength` |
 | Data | `DataTable`, `Toc`, `Timeline` (schedule rail with statuses, finale and expandable details), `StatBand`, `TwitchEmbed` + `twitchPlayerUrl`, `ChartCard`, `ChartTooltip`, `ChartLegend`, and `chartTheme` values (`SERIES_COLORS`, `seriesColor`, `AXIS`, `AXIS_TICK`, `CATEGORY_TICK`, `GRID`, `CURSOR`) to spread into Recharts or any SVG chart library |
-| osu! | `BeatmapRow` (a mappool slot), `ModTag`, `PlayerIdentity`, `MOD_BUCKETS`, `MOD_COLORS`, `modColor`, `profileUrl`, `beatmapUrl`, `coverUrl`, `slotLabel`, `GUEST_AVATAR` |
+| osu! | `BeatmapRow` (a mappool slot), `ModTag`, `PlayerIdentity`, `SignInWithOsu` (href or onClick, no auth library), `MOD_BUCKETS`, `MOD_COLORS`, `modColor`, `profileUrl`, `beatmapUrl`, `coverUrl`, `slotLabel`, `GUEST_AVATAR` |
 | Tournament | `AvailabilityGrid` (client picker), `AvailabilityDisplay` (read-only, heat mode), `RosterCard`, `FundingMeter`, `StretchTiers`, `StatusBadge`, `STATUSES`, and the availability math (`DAYS`, `HOURS`, `slotId`, `rangeIds`, `toggleIds`, `applyIds`, `overlapLevels`, `fullOverlap`, `summarizeAvailability`) |
+| Region map | `RegionMap` (display, `highlight` some regions), `RegionPicker` (client, controlled radio group over the map: click, arrows, Home/End, Enter/Space, plus a chip row and optional `OUTSIDE_PNW`), `RegionMapFrame`, `REGION_ISO`, `regionPath`, and the precomputed path data (`STATE_PATHS`, `PROVINCE_PATHS`, `ALASKA_INSET`; regenerate with `bun scripts/build-region-map.mjs`) |
+| Crowdfund | `DonorWall` (client, Latest / Top donors tabs), `DonorCard`, `TopDonorCallout`, `DonorAvatar`, `DonorName`, `DonorBanner` (a donor's name over banner art you host), `BannerPicker`, `CLASSIC_BANNER_STYLE`, `DONOR_BANNER_SIZE`, `sanitizeBannerText`, `donorAmount`. Pair with `FundingMeter` and `StretchTiers` |
+| Soundtrack | `TrackCard` (cover or number tile, meta, credits, player), `TrackPlayer` (YouTube, SoundCloud, audio file or a Listen link), `youtubeId`, `soundcloudPlayerUrl`, `guessProvider` |
 | Icons | `DiscordIcon`, `TwitchIcon`, `YouTubeIcon`, `KofiIcon`, `OsuIcon`, `BracketIcon`, `MenuIcon`, `CloseIcon`, `ChevronDownIcon`, `CheckIcon`, `ArrowRightIcon`, `ExternalIcon`, `StarIcon`; `Icon` + `createIcon` for more. Decorative unless given a `title` |
-| Utilities | `cx`, `formatUsd`, `formatMmSs`, `plural`, `padCount`, `percentOf`, `slugify`, `isExternalHref`, `mulberry32`, `randRange`, `useMediaQuery`, `useMotionEnabled`, `useMounted`, `useEscapeKey`, `useOutsideClick`, `useScrollLock` |
+| Utilities | `cx`, `formatUsd`, `formatMmSs`, `formatShortDate`, `rovingKey`, `plural`, `padCount`, `percentOf`, `slugify`, `isExternalHref`, `mulberry32`, `randRange`, `useMediaQuery`, `useMotionEnabled`, `useMounted`, `useEscapeKey`, `useOutsideClick`, `useScrollLock` |
+
+### Charts (`@evergreencup/ui-kit/charts`)
+
+Recharts charts in the kit's chart theme: `CumulativeRaisedChart`, `DonationSourceDonut`, `RegistrationStatusChart`, their tooltips, and `ChartEmpty`. `recharts` is an optional peer, so install it only if you use this subpath; the main barrel never imports it.
+
+```sh
+bun add recharts
+```
+
+```tsx
+import { ChartCard } from "@evergreencup/ui-kit";
+import { CumulativeRaisedChart } from "@evergreencup/ui-kit/charts";
+
+<ChartCard eyebrow="Crowdfund" title="Raised over time">
+  <CumulativeRaisedChart data={days} goalUsdCents={100000} />
+</ChartCard>
+```
+
+The charts are client components that fill their parent. `width` and `height` set the first render's size before the container is measured.
 
 ### Conventions
 

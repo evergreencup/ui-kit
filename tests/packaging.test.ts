@@ -1,8 +1,9 @@
 /**
  * @file tests/packaging.test.ts
  * @desc What ships: every source file has the header, relative imports end in .js, next is
- *       imported with a .js suffix, and every file using hooks or browser-only React APIs starts
- *       with "use client" right after its header (and no other file does).
+ *       imported with a .js suffix, every file using hooks or browser-only React APIs (or
+ *       importing recharts, which ships no directive) starts with "use client" right after its
+ *       header (and no other file does), and the main barrel never reaches recharts.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
  * @modified Tue Oct 6, 2026
@@ -19,8 +20,8 @@ const walk = (dir: string): string[] =>
     return statSync(p).isDirectory() ? walk(p) : /\.tsx?$/.test(p) ? [p] : [];
   });
 const files = walk(root).map((path) => ({ path, src: readFileSync(path, "utf8") }));
-// Any hook call except useId (server-safe), or a portal.
-const CLIENT_API = /\buse(?!Id\()[A-Z]\w*\(|\bcreatePortal\(/;
+// Any hook call (generic or not) except useId (server-safe), or a portal.
+const CLIENT_API = /\buse(?!Id\()[A-Z]\w*(?:<[^>]*>)?\(|\bcreatePortal\(/;
 const firstStatement = (src: string): string =>
   src.replace(/^\/\*\*[\s\S]*?\*\/\s*/, "").split("\n")[0] ?? "";
 
@@ -49,9 +50,17 @@ describe("packaging", () => {
     for (const { path, src } of files) {
       const client = firstStatement(src) === '"use client";';
       const needs =
-        CLIENT_API.test(src.replace(/import[^;]+;/g, "")) && !path.endsWith("/index.ts");
+        (CLIENT_API.test(src.replace(/import[^;]+;/g, "")) || src.includes('from "recharts"')) &&
+        !path.endsWith("/index.ts");
       expect(client, path).toBe(needs);
     }
+  });
+
+  it("keeps recharts out of everything but src/charts", () => {
+    for (const { path, src } of files) {
+      if (!path.includes("/src/charts/")) expect(src, path).not.toContain('"recharts"');
+    }
+    expect(readFileSync(join(root, "index.ts"), "utf8")).not.toMatch(/from "\.\/charts/);
   });
 
   it("keeps hex colors out of class strings", () => {

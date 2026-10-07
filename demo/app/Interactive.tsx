@@ -1,7 +1,7 @@
 /**
  * @file demo/app/Interactive.tsx
- * @desc The stateful demos: every form control and the availability picker, wired to local state
- *       so a visitor can try them.
+ * @desc The stateful demos: every form control, the availability and region pickers, the banner
+ *       picker and a submitting form, wired to local state so a visitor can try them.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
  * @modified Tue Oct 6, 2026
@@ -12,15 +12,21 @@
 import {
   AvailabilityDisplay,
   AvailabilityGrid,
+  BannerPicker,
   Checkbox,
   ChoiceChips,
   OptionCards,
+  type RegionChoice,
+  RegionPicker,
   Select,
+  SignInWithOsu,
+  SubmitButton,
   Textarea,
   TextInput,
   ToggleChips,
 } from "@evergreencup/ui-kit";
 import { useState } from "react";
+import { BANNER_VARIANTS } from "./samples";
 
 const REGIONS = [
   { value: "wa", label: "Washington" },
@@ -111,6 +117,53 @@ export function AvailabilityDemo() {
         levels={levels}
         maxLevel={2}
         highlightIds={mine.filter((id) => TEAM.includes(id))}
+      />
+    </div>
+  );
+}
+
+export function RegionDemo() {
+  const [region, setRegion] = useState<RegionChoice | null>("Washington");
+  return <RegionPicker value={region} onChange={setRegion} allowOutside className="max-w-xl" />;
+}
+
+export function BannerDemo() {
+  const [variant, setVariant] = useState("frost");
+  const [name, setName] = useState("cedar");
+  return (
+    <div className="flex flex-col gap-4">
+      <TextInput
+        id="demo-banner-name"
+        label="Name on the banner"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <BannerPicker
+        variants={BANNER_VARIANTS}
+        name={name}
+        subtitle="Founding donor"
+        value={variant}
+        onChange={setVariant}
+      />
+    </div>
+  );
+}
+
+const wait = () => new Promise<void>((resolve) => setTimeout(resolve, 1500));
+
+export function SubmitDemo() {
+  const [signingIn, setSigningIn] = useState(false);
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <form action={wait}>
+        <SubmitButton>Submit (waits 1.5s)</SubmitButton>
+      </form>
+      <SignInWithOsu
+        pending={signingIn}
+        onClick={() => {
+          setSigningIn(true);
+          setTimeout(() => setSigningIn(false), 1500);
+        }}
       />
     </div>
   );

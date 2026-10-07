@@ -6,6 +6,12 @@
 
 - A demo site in `demo/`, deployed to GitHub Pages, with example components and the Evergreen Cup banner on top. The consumer check now builds it.
 - MIT license, CI and Pages workflows.
+- Region map: `RegionMap`, the client `RegionPicker` (keyboard radio group over the map), the precomputed path data and `scripts/build-region-map.mjs` to regenerate it.
+- Crowdfund display: `DonorWall`, `DonorCard`, `TopDonorCallout`, `DonorBanner`, `BannerPicker` and the banner presets.
+- `@evergreencup/ui-kit/charts`: `CumulativeRaisedChart`, `DonationSourceDonut`, `RegistrationStatusChart` and their tooltips, with `recharts` as an optional peer.
+- Soundtrack: `TrackCard`, `TrackPlayer` and the embed helpers.
+- `ComingSoon`, `ComingSoonNote`, `SubmitButton`, `SignInWithOsu`, `formatShortDate`, `rovingKey`.
+- Demo sections for each.
 
 ### Removed
 

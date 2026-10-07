@@ -11,8 +11,13 @@ export const SECTIONS = [
   { id: "basics", title: "Basics" },
   { id: "forms", title: "Forms" },
   { id: "data", title: "Data" },
+  { id: "region", title: "Region map" },
   { id: "tournament", title: "Tournament" },
+  { id: "crowdfund", title: "Crowdfund" },
+  { id: "charts", title: "Charts" },
+  { id: "soundtrack", title: "Soundtrack" },
   { id: "osu", title: "osu!" },
+  { id: "pages", title: "Page pieces" },
   { id: "icons", title: "Icons" },
 ].map((s, i) => ({ ...s, num: String(i + 1).padStart(2, "0") }));
 

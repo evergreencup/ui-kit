@@ -3,7 +3,8 @@
  * @desc @evergreencup/ui-kit: Evergreen Cup brand data and React components for Next.js. Pair with
  *       the theme: `@import "@evergreencup/ui-kit/theme.css";` after Tailwind. Client components
  *       carry their own "use client" directive, so this barrel is safe in Server Components.
- *       The MDX map is at "@evergreencup/ui-kit/mdx" and the site data at "@evergreencup/ui-kit/site".
+ *       The MDX map is at "@evergreencup/ui-kit/mdx", the site data at "@evergreencup/ui-kit/site"
+ *       and the Recharts charts at "@evergreencup/ui-kit/charts" (this barrel never imports recharts).
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
  * @modified Tue Oct 6, 2026
@@ -61,6 +62,16 @@ export * from "./components/brand/TokenRow.js";
 export * from "./components/brand/TypeSpecimen.js";
 export * from "./components/brand/Wordmark.js";
 export * from "./components/brand/wordmarkStyles.js";
+// Components: crowdfund
+export * from "./components/crowdfund/BannerPicker.js";
+export * from "./components/crowdfund/bannerVariants.js";
+export * from "./components/crowdfund/DonorAvatar.js";
+export * from "./components/crowdfund/DonorBanner.js";
+export * from "./components/crowdfund/DonorCard.js";
+export * from "./components/crowdfund/DonorName.js";
+export * from "./components/crowdfund/DonorWall.js";
+export * from "./components/crowdfund/donors.js";
+export * from "./components/crowdfund/TopDonorCallout.js";
 // Components: data
 export * from "./components/data/ChartCard.js";
 export * from "./components/data/ChartTooltip.js";
@@ -70,7 +81,6 @@ export * from "./components/data/StatBand.js";
 export * from "./components/data/Timeline.js";
 export * from "./components/data/Toc.js";
 export * from "./components/data/TwitchEmbed.js";
-
 // Components: forms
 export * from "./components/forms/Checkbox.js";
 export * from "./components/forms/ChipButton.js";
@@ -81,6 +91,7 @@ export * from "./components/forms/fieldStyles.js";
 export * from "./components/forms/OptionCards.js";
 export * from "./components/forms/PickerGroup.js";
 export * from "./components/forms/Select.js";
+export * from "./components/forms/SubmitButton.js";
 export * from "./components/forms/selectKeys.js";
 export * from "./components/forms/Textarea.js";
 export * from "./components/forms/TextInput.js";
@@ -90,6 +101,8 @@ export * from "./components/icons/Icon.js";
 export * from "./components/icons/icons.js";
 // Components: layout
 export * from "./components/layout/AccountPill.js";
+export * from "./components/layout/ComingSoon.js";
+export * from "./components/layout/ComingSoonNote.js";
 export * from "./components/layout/HeroMediaPlaceholder.js";
 export * from "./components/layout/MobileMenu.js";
 export * from "./components/layout/NavLink.js";
@@ -104,6 +117,17 @@ export * from "./components/osu/ModTag.js";
 export * from "./components/osu/modColors.js";
 export * from "./components/osu/osuLinks.js";
 export * from "./components/osu/PlayerIdentity.js";
+export * from "./components/osu/SignInWithOsu.js";
+// Components: region
+export * from "./components/region/RegionMap.js";
+export * from "./components/region/RegionMapFrame.js";
+export * from "./components/region/RegionPicker.js";
+export * from "./components/region/regionPaths.js";
+export * from "./components/region/regions.js";
+// Components: soundtrack
+export * from "./components/soundtrack/TrackCard.js";
+export * from "./components/soundtrack/TrackPlayer.js";
+export * from "./components/soundtrack/trackEmbeds.js";
 // Components: tournament
 export * from "./components/tournament/AvailabilityDisplay.js";
 export * from "./components/tournament/AvailabilityGrid.js";
@@ -123,4 +147,5 @@ export * from "./utils/cx.js";
 export * from "./utils/format.js";
 export * from "./utils/href.js";
 export * from "./utils/random.js";
+export * from "./utils/roving.js";
 export * from "./utils/slug.js";
