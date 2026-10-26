@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-26
+
 ### Added
 
 - A demo site in `demo/`, deployed to GitHub Pages, with example components and the Evergreen Cup banner on top. The consumer check now builds it.

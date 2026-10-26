@@ -8,11 +8,8 @@ Distilled from `evergreencup.org/apps/web`. Peer dependencies: Next.js 16, React
 
 **[See the example components](https://evergreencup.github.io/ui-kit/).** The demo is the app in [`demo/`](./demo), built from the packed kit on every push to `main`.
 
-Not on npm yet. Use it from a packed tarball:
-
 ```sh
-bun run build && bun pm pack            # makes evergreencup-ui-kit-0.1.0.tgz
-bun add ./evergreencup-ui-kit-0.1.0.tgz # in the app
+bun add @evergreencup/ui-kit
 ```
 
 ## Setup (five minutes)
